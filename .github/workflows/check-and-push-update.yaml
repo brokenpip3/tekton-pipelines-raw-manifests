@@ -1,0 +1,49 @@
+name: checking updates
+
+on:
+  schedule:
+  - cron: "40 00 * * *"
+  push:
+    branch: main
+
+jobs:
+  raw-manifests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.7"
+    - name: Install dependencies
+      run: |
+        echo "downloading yq"
+        python -m pip install --upgrade pip
+        pip install yq
+        yq --version
+
+        KUSTOMIZE=3.5.5
+        echo "downloading kustomize ${KUSTOMIZE}"
+        curl -sL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE}/kustomize_v${KUSTOMIZE}_linux_amd64.tar.gz | \
+        tar xz && mv kustomize /usr/local/bin/kustomize
+        kustomize version
+    - name: Check last upstream version
+      id: lastrelease
+      run: |
+        get_latest_release() {
+          curl -s "https://api.github.com/repos/tektoncd/pipeline/releases" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'|head -n 1
+        }
+        echo "::set-output name=latest_tag::$(get_latest_release)"
+    - name: execute hack
+      id: hack
+      env:
+        RELEASE: ${{ steps.lastrelease.outputs.latest_tag }}
+      run: |
+        cd deploy
+        ../hack/new-release.sh ${RELEASE}
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Automated Update to version ${{ steps.lastrelease.outputs.latest_tag }}
+        branch: main
+        file_pattern: deploy/*.yaml
+        tagging_message: ${{ steps.lastrelease.outputs.latest_tag }}
