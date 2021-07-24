@@ -38,7 +38,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
-  name: tekton-operator-raw
+  name: tekton-pipelines-raw
   namespace: flux-system
 spec:
   interval: 10m
