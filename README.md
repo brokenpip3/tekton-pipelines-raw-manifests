@@ -1,10 +1,10 @@
-# Tekton operator raw manifests
+# Tekton pipelines raw manifests
 
 ## Why?
 
-If you need to install tekton operator https://github.com/tektoncd/operator with
-a gitops like mechanism (ex: Flux) there is no official helm chart or valid raw
-k8s manifests.
+If you need to install tekton pipelines https://github.com/tektoncd/pipeline with
+a gitops like mechanism (ex: Flux) there is an official helm chart that does not
+provide any solid values (only auth e docker-registry, see: https://github.com/cdfoundation/tekton-helm-chart/blob/master/charts/tekton-pipeline/values.yaml).
 
 This repo contains a ci flow that produce, update and tag any new tekton
 operator version in raw k8s yaml files.
@@ -24,11 +24,11 @@ See [new-release](./hack/new-release.sh) and [github-ci](.github/workflows/check
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: tekton-operator-raw
+  name: tekton-pipelines-raw
   namespace: flux-system
 spec:
   interval: 10m
-  url: https://github.com/brokenpip3/tekton-operator-raw-manifests
+  url: https://github.com/brokenpip3/tekton-pipelines-raw-manifests
   ref:
     tag: v0.23.0-2
   ignore: |
@@ -46,7 +46,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: tekton-operator-raw
+    name: tekton-pipelines-raw
   timeout: 2m0s
   validation: client
 ...
