@@ -24,12 +24,12 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.26.0"
+    app.kubernetes.io/version: "v0.27.0"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.26.0"
+    pipeline.tekton.dev/release: "v0.27.0"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.26.0"
+    version: "v0.27.0"
 spec:
   replicas: 1
   selector:
@@ -40,19 +40,17 @@ spec:
       app.kubernetes.io/part-of: tekton-pipelines
   template:
     metadata:
-      annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
       labels:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/component: webhook
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.26.0"
+        app.kubernetes.io/version: "v0.27.0"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.26.0"
+        pipeline.tekton.dev/release: "v0.27.0"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-webhook
-        version: "v0.26.0"
+        version: "v0.27.0"
     spec:
       affinity:
         nodeAffinity:
@@ -79,7 +77,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.26.0@sha256:79cf8b670ab008d605362641443648d9ac0ff247f1f943bb4d5209716a9b49fa
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.27.0@sha256:9d1de73bf9776d0862d211a6e123802959e56fd1e43ce39054374b9f2d4ed966
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
