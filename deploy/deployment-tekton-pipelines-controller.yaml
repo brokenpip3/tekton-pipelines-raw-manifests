@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: controller
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.28.3"
+    app.kubernetes.io/version: "v0.33.0"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.28.3"
+    pipeline.tekton.dev/release: "v0.33.0"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.28.3"
+    version: "v0.33.0"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: controller
         app.kubernetes.io/component: controller
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.28.3"
+        app.kubernetes.io/version: "v0.33.0"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.28.3"
+        pipeline.tekton.dev/release: "v0.33.0"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-controller
-        version: "v0.28.3"
+        version: "v0.33.0"
     spec:
       affinity:
         nodeAffinity:
@@ -61,24 +61,20 @@ spec:
       serviceAccountName: tekton-pipelines-controller
       containers:
         - name: tekton-pipelines-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.28.3@sha256:9d915b165fc8c08687ba5d85e283b919ebbc6e408899b8467d6fcb8ce98560a4
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.33.0@sha256:193206042ee0ff391d81ceaa49d1788093aea1efec7cd49aadc91ca0e7b26745
           args: [
             # These images are built on-demand by `ko resolve` and are replaced
             # by image references by digest.
-            "-kubeconfig-writer-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.28.3@sha256:0b2cfa4bccd39b68f9a4c7421813b7ee08c5f1ce51d2b391cbac5b6e8951614e", "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.28.3@sha256:c1b46e041dd9a47e18623f4b82301d55e329a867f831dea630f45c047a349b06", "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.28.3@sha256:a1adac1dc132924ffbb4d69467006da6a444afd22e4839e9f38c829d24bf08f8", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.28.3@sha256:1ad167524ffd177f4bed6c07e11bb1a54f9eaef43142ee93e0ea0e470dd10cd3", "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.28.3@sha256:8269a3f1cc5f09c8a8b27578bdc8dc1b2b867b18c77da9717bfa7db69d0ff00b", "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.28.3@sha256:436bda2233820f2220ebf856542f6e7761a250ec2a153abd702c2ebfedeef8cf",
+            "-kubeconfig-writer-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.33.0@sha256:62924d16502451c0acce0da2e561288544d4b284a2bca2bc2c8fc41f375ca42a", "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.33.0@sha256:4fd1a438b2d92cb86067bfe3ac552594c7519932e6810f68db4ee56ad7d37684", "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.33.0@sha256:49d7735e641ce37b88f02e4f1e868550bd5ec7ddc1d6cac5f9d64dc86c6e7b68", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.33.0@sha256:a47b197f21632d7ed540a01c4f13522bdcbcd251511a323124a5c4d5794acd7d", "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.33.0@sha256:d1e1a5e0a2e45dd44efc0b01ab44fd751e81b0329e2002a6f2536adc8791286a", "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.33.0@sha256:eb561c70d94c44fd24025ab012641ed7a24735eb48fb4bd8388ffef34ecb7ed9", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.33.0@sha256:3fbc09821239fc1113f51f30d9f63f0efd49893dc19b0b3b0b86e9c12d00c249",
             # This is gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim
             "-gsutil-image", "gcr.io/google.com/cloudsdktool/cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f",
             # The shell image must be root in order to create directories and copy files to PVCs.
-            # gcr.io/distroless/base:debug as of Apirl 17, 2021
+            # gcr.io/distroless/base:debug as of February 17, 2022
             # image shall not contains tag, so it will be supported on a runtime like cri-o
-            "-shell-image", "gcr.io/distroless/base@sha256:aa4fd987555ea10e1a4ec8765da8158b5ffdfef1e72da512c7ede509bc9966c4",
+            "-shell-image", "gcr.io/distroless/base@sha256:3cebc059e7e52a4f5a389aa6788ac2b582227d7953933194764ea434f4d70d64",
             # for script mode to work with windows we need a powershell image
             # pinning to nanoserver tag as of July 15 2021
-            "-shell-image-win", "mcr.microsoft.com/powershell:nanoserver@sha256:b6d5ff841b78bdf2dfed7550000fd4f3437385b8fa686ec0f010be24777654d6",
-            # Experimental. Uncomment below to disable TaskRun and PipelineRun
-            # reconcilers' built-in taskRef and pipelineRef resolution procedures.
-            # "-experimental-disable-in-tree-resolution",
-          ]
+            "-shell-image-win", "mcr.microsoft.com/powershell:nanoserver@sha256:b6d5ff841b78bdf2dfed7550000fd4f3437385b8fa686ec0f010be24777654d6"]
           volumeMounts:
             - name: config-logging
               mountPath: /etc/config-logging
@@ -89,16 +85,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            # These phony AWS credentials are here to work around a bug in the aws go sdk
-            # that causes extremely long delays in the execution of tasks after the initial
-            # deployment of the Tekton Pipelines controller. See issue https://github.com/tektoncd/pipeline/issues/4087
-            # for more information.
-            - name: AWS_ACCESS_KEY_ID
-              value: foobarbaz
-            - name: AWS_SECRET_ACCESS_KEY
-              value: foobarbaz
-            - name: AWS_DEFAULT_REGION
-              value: foobarbaz
             # If you are changing these names, you will also need to update
             # the controller's Role in 200-role.yaml to include the new
             # values in the "configmaps" "get" rule.
@@ -131,6 +117,10 @@ spec:
             runAsUser: 65532
             runAsGroup: 65532
           ports:
+            - name: metrics
+              containerPort: 9090
+            - name: profiling
+              containerPort: 8008
             - name: probes
               containerPort: 8080
           livenessProbe:
