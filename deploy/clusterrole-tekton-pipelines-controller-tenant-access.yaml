@@ -8,14 +8,10 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
 rules:
-  # Read-write access to create Pods and PVCs (for Workspaces)
+  # Read-write access to create Pods, K8s Events and PVCs (for Workspaces)
   - apiGroups: [""]
-    resources: ["pods", "persistentvolumeclaims"]
+    resources: ["pods", "pods/log", "events", "persistentvolumeclaims"]
     verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
-  # Write permissions to publish events.
-  - apiGroups: [""]
-    resources: ["events"]
-    verbs: ["create", "update", "patch"]
   # Read-only access to these.
   - apiGroups: [""]
     resources: ["configmaps", "limitranges", "secrets", "serviceaccounts"]
