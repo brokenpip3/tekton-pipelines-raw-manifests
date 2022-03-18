@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: controller
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.33.3"
+    app.kubernetes.io/version: "v0.32.3"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.33.3"
+    pipeline.tekton.dev/release: "v0.32.3"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.33.3"
+    version: "v0.32.3"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: controller
         app.kubernetes.io/component: controller
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.33.3"
+        app.kubernetes.io/version: "v0.32.3"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.33.3"
+        pipeline.tekton.dev/release: "v0.32.3"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-controller
-        version: "v0.33.3"
+        version: "v0.32.3"
     spec:
       affinity:
         nodeAffinity:
@@ -61,17 +61,17 @@ spec:
       serviceAccountName: tekton-pipelines-controller
       containers:
         - name: tekton-pipelines-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.33.3@sha256:b563490f5aae657a75fd8ceb5e7bc77cfd5abdb4b87c6e00e71c638ec3f84585
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.32.3@sha256:4a6a923ebe0a424fc4b0f1b3dcb87c487f867cad3ae6717830befe1dcbe86a13
           args: [
             # These images are built on-demand by `ko resolve` and are replaced
             # by image references by digest.
-            "-kubeconfig-writer-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.33.3@sha256:a2e4ce7c452105a14cb9e0fbfca542c17f843177b391deadfc8326a1f6df893c", "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.33.3@sha256:a81b311ad4ebb5be80c1d7e819f1c4484f05b7ff72556451b4de67c074da0c5c", "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.33.3@sha256:924f937a3f26b17c959017a2417940b58f171e3580b434af344d65ce43333e1b", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.33.3@sha256:9cc86b16ca8b1103ace0e08a0a7150178c1b6d3f62405c0a61a98f55a3f3795a", "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.33.3@sha256:f784f4b56652e3d576b25890f0fd998c79a65b4b755bad409311b7303c39d538", "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.33.3@sha256:2265b21b3c68b944fa14ca069f2ec8f4ebb8f7c47ea089725fbd1bb550610388", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.33.3@sha256:d2a055e64fb47ce125ee94e46b772e64ccec3c0e5d644ccf3e9db4266d6992d8",
+            "-kubeconfig-writer-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.32.3@sha256:ddf717825a7b86dc86e315a4f8a9a1bb87b857f2478b5c1db62fca4c49b4d3cd", "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.32.3@sha256:1a20112d6853ce567c19d7ab0112381acdbe1e4cbfcb172598ac7f1989dbab2e", "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.32.3@sha256:4bf0fc815b3f526dda0fb528d6e17fd180d1f983462bc12719357945dec7f6b5", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.32.3@sha256:ec1310d84c5e45d9663a7f2ed187c9084c794daed76ad9348921239365361271", "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.32.3@sha256:be7b840d48674cf135c5414a1741653393e525738bf11aee264d6bd64fbf0975", "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.32.3@sha256:2fa0334b9658884e8d199cc28bd82682553d8b98f71ce819767134b3a88bee48",
             # This is gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim
             "-gsutil-image", "gcr.io/google.com/cloudsdktool/cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f",
             # The shell image must be root in order to create directories and copy files to PVCs.
-            # gcr.io/distroless/base:debug as of February 17, 2022
+            # gcr.io/distroless/base:debug as of October 21, 2021
             # image shall not contains tag, so it will be supported on a runtime like cri-o
-            "-shell-image", "gcr.io/distroless/base@sha256:3cebc059e7e52a4f5a389aa6788ac2b582227d7953933194764ea434f4d70d64",
+            "-shell-image", "gcr.io/distroless/base@sha256:cfdc553400d41b47fd231b028403469811fcdbc0e69d66ea8030c5a0b5fbac2b",
             # for script mode to work with windows we need a powershell image
             # pinning to nanoserver tag as of July 15 2021
             "-shell-image-win", "mcr.microsoft.com/powershell:nanoserver@sha256:b6d5ff841b78bdf2dfed7550000fd4f3437385b8fa686ec0f010be24777654d6"]
@@ -85,6 +85,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            # These phony AWS credentials are here to work around a bug in the aws go sdk
+            # that causes extremely long delays in the execution of tasks after the initial
+            # deployment of the Tekton Pipelines controller. See issue https://github.com/tektoncd/pipeline/issues/4087
+            # for more information.
+            - name: AWS_ACCESS_KEY_ID
+              value: foobarbaz
+            - name: AWS_SECRET_ACCESS_KEY
+              value: foobarbaz
+            - name: AWS_DEFAULT_REGION
+              value: foobarbaz
             # If you are changing these names, you will also need to update
             # the controller's Role in 200-role.yaml to include the new
             # values in the "configmaps" "get" rule.
