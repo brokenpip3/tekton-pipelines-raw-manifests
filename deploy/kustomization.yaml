@@ -23,6 +23,7 @@ resources:
 - customresourcedefinition-pipelineresources.tekton.dev.yaml
 - customresourcedefinition-pipelineruns.tekton.dev.yaml
 - customresourcedefinition-pipelines.tekton.dev.yaml
+- customresourcedefinition-resolutionrequests.resolution.tekton.dev.yaml
 - customresourcedefinition-runs.tekton.dev.yaml
 - customresourcedefinition-taskruns.tekton.dev.yaml
 - customresourcedefinition-tasks.tekton.dev.yaml
