@@ -24,14 +24,13 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.37.2"
+    app.kubernetes.io/version: "v0.38.0"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.37.2"
+    pipeline.tekton.dev/release: "v0.38.0"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.37.2"
+    version: "v0.38.0"
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: webhook
@@ -44,13 +43,13 @@ spec:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/component: webhook
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.37.2"
+        app.kubernetes.io/version: "v0.38.0"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.37.2"
+        pipeline.tekton.dev/release: "v0.38.0"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-webhook
-        version: "v0.37.2"
+        version: "v0.38.0"
     spec:
       affinity:
         nodeAffinity:
@@ -77,7 +76,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.37.2@sha256:2e7187c08e5a43168c89840a74c4609e648e0a391c5b3da8544cf9b835b2d0f9
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.38.0@sha256:d2f4dfeb4ceafcdf208c5882d281d7f32eaf8e56a4f918554faae62e6db56fbf
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
