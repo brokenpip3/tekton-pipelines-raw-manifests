@@ -1,4 +1,4 @@
-# Copyright 2020 The Tekton Authors
+# Copyright 2022 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,22 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-kind: Role
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  # ClusterRole for resolvers to monitor and update resolutionrequests.
+  name: tekton-pipelines-resolvers-resolution-request-updates
   labels:
-    app.kubernetes.io/component: controller
+    app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
 rules:
+  - apiGroups: ["resolution.tekton.dev"]
+    resources: ["resolutionrequests", "resolutionrequests/status"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: ["tekton.dev"]
+    resources: ["tasks", "pipelines"]
+    verbs: ["get", "list"]
+  # Read-only access to these.
   - apiGroups: [""]
-    resources: ["configmaps"]
-    verbs: ["list", "watch"]
-  # The controller needs access to these configmaps for logging information and runtime configuration.
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    verbs: ["get"]
-    resourceNames: ["config-logging", "config-observability", "config-artifact-bucket", "config-artifact-pvc", "feature-flags", "config-leader-election", "config-registry-cert"]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch"]
+
 ---

@@ -1,4 +1,4 @@
-# Copyright 2020 The Tekton Authors
+# Copyright 2021 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,22 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
 metadata:
-  name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  name: tekton-pipelines-resolvers-namespace-rbac
+  namespace: tekton-pipelines-resolvers
   labels:
-    app.kubernetes.io/component: controller
+    app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-rules:
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    verbs: ["list", "watch"]
-  # The controller needs access to these configmaps for logging information and runtime configuration.
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    verbs: ["get"]
-    resourceNames: ["config-logging", "config-observability", "config-artifact-bucket", "config-artifact-pvc", "feature-flags", "config-leader-election", "config-registry-cert"]
+subjects:
+  - kind: ServiceAccount
+    name: tekton-pipelines-resolvers
+    namespace: tekton-pipelines-resolvers
+roleRef:
+  kind: Role
+  name: tekton-pipelines-resolvers-namespace-rbac
+  apiGroup: rbac.authorization.k8s.io
+
 ---

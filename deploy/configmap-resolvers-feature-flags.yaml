@@ -1,4 +1,4 @@
-# Copyright 2019 Tekton Authors LLC
+# Copyright 2019 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,40 +15,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: config-logging
+  name: resolvers-feature-flags
   namespace: tekton-pipelines-resolvers
   labels:
     app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
 data:
-  zap-logger-config: |
-    {
-      "level": "info",
-      "development": false,
-      "sampling": {
-        "initial": 100,
-        "thereafter": 100
-      },
-      "outputPaths": ["stdout"],
-      "errorOutputPaths": ["stderr"],
-      "encoding": "json",
-      "encoderConfig": {
-        "timeKey": "timestamp",
-        "levelKey": "severity",
-        "nameKey": "logger",
-        "callerKey": "caller",
-        "messageKey": "message",
-        "stacktraceKey": "stacktrace",
-        "lineEnding": "",
-        "levelEncoder": "",
-        "timeEncoder": "iso8601",
-        "durationEncoder": "",
-        "callerEncoder": ""
-      }
-    }
-  # Log level overrides
-  loglevel.controller: "info"
-  loglevel.webhook: "info"
+  # Setting this flag to "true" enables remote resolution of Tekton OCI bundles.
+  enable-bundles-resolver: "true"
+  # Setting this flag to "true" enables remote resolution of tasks and pipelines via the Tekton Hub.
+  enable-hub-resolver: "true"
+  # Setting this flag to "true" enables remote resolution of tasks and pipelines from Git repositories.
+  enable-git-resolver: "true"
+  # Setting this flag to "true" enables remote resolution of tasks and pipelines from other namespaces within the cluster.
+  enable-cluster-resolver: "true"
 
 ---

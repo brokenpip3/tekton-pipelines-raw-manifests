@@ -26,8 +26,4 @@ rules:
     resources: ["secrets"]
     verbs: ["get", "update"]
     resourceNames: ["webhook-certs"]
-  - apiGroups: ["policy"]
-    resources: ["podsecuritypolicies"]
-    resourceNames: ["tekton-pipelines"]
-    verbs: ["use"]
 ---
