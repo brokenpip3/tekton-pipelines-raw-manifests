@@ -20,6 +20,7 @@ resources:
 - configmap-config-logging.yaml
 - configmap-config-observability.yaml
 - configmap-config-registry-cert.yaml
+- configmap-config-trusted-resources.yaml
 - configmap-feature-flags.yaml
 - configmap-git-resolver-config.yaml
 - configmap-hubresolver-config.yaml
@@ -27,6 +28,7 @@ resources:
 - configmap-resolvers-feature-flags.yaml
 - customresourcedefinition-clustertasks.tekton.dev.yaml
 - customresourcedefinition-conditions.tekton.dev.yaml
+- customresourcedefinition-customruns.tekton.dev.yaml
 - customresourcedefinition-pipelineresources.tekton.dev.yaml
 - customresourcedefinition-pipelineruns.tekton.dev.yaml
 - customresourcedefinition-pipelines.tekton.dev.yaml
