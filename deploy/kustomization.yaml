@@ -36,6 +36,7 @@ resources:
 - customresourcedefinition-runs.tekton.dev.yaml
 - customresourcedefinition-taskruns.tekton.dev.yaml
 - customresourcedefinition-tasks.tekton.dev.yaml
+- customresourcedefinition-verificationpolicies.tekton.dev.yaml
 - deployment-tekton-pipelines-controller.yaml
 - deployment-tekton-pipelines-remote-resolvers.yaml
 - deployment-tekton-pipelines-webhook.yaml
