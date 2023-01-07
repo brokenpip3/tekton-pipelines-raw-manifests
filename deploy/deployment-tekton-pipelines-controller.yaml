@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: controller
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.43.0"
+    app.kubernetes.io/version: "v0.43.1"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.43.0"
+    pipeline.tekton.dev/release: "v0.43.1"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.43.0"
+    version: "v0.43.1"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: controller
         app.kubernetes.io/component: controller
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.43.0"
+        app.kubernetes.io/version: "v0.43.1"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.43.0"
+        pipeline.tekton.dev/release: "v0.43.1"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-controller
-        version: "v0.43.0"
+        version: "v0.43.1"
     spec:
       affinity:
         nodeAffinity:
@@ -61,11 +61,11 @@ spec:
       serviceAccountName: tekton-pipelines-controller
       containers:
         - name: tekton-pipelines-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.43.0@sha256:f71d7dc4fa4760f0cd3236e4869d40b163ddb48ecb7a81af8c84b45ba63db669
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.43.1@sha256:893d018568ff511c57288572a1303b6bec5421fb04aa64ca1f83595da9abd3e5
           args: [
             # These images are built on-demand by `ko resolve` and are replaced
             # by image references by digest.
-            "-kubeconfig-writer-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.43.0@sha256:9e7468ffff5d888edc0bb5e274ed423580a13706738b08cf5d013585ef9dc206", "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.43.0@sha256:ab32d737ef21248f35c08c30bf01f583dda78ee7aad8945d6439300641b778e3", "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.43.0@sha256:370f969fd846d13e1fcdc28297c152587987742a169c684d3794bd9d4db501b7", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.43.0@sha256:6f93beb14df2ffca5c9e05cd055f5ff67721f96430a508596e21b6ae34d58677", "-sidecarlogresults-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/sidecarlogresults:v0.43.0@sha256:4f2477b2d31321d2b1d8dbea204327c1344ce2a2b149cef31e1e13b78f7ad49c", "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.43.0@sha256:e1be69fee38b7b6140c1751fa2c771c61e1b1d2c3afd9ca48b1b9b1f28f3f8cf", "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.43.0@sha256:90a54a36265f4f2c5040c54b768b878f04bacc6a32dcb13fddb7f0c8502486b8", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.43.0@sha256:667c4e254b94f42cdb83c0710e196ea30f2fde8ce96498b7850f0b5de72d2567",
+            "-kubeconfig-writer-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.43.1@sha256:b635b3cb4f00cf051d7ac9900c0f23b92f2b010107aec3f6e4eaedf1bbb4518c", "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.43.1@sha256:bac704a7781854bf41fb1ebb4f06d42c82d51262b426473837b6fcea405869e4", "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.43.1@sha256:b3ecb6dcfd1f54018e689a67def78a910d5e620e2215e87808b2b4ffb6c3e36e", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.43.1@sha256:022854b3c9db2ca312f44ead3f867a320788bb044f21a4975d2d48ae5fe04069", "-sidecarlogresults-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/sidecarlogresults:v0.43.1@sha256:f61791afdf90a6ece9126a767e7dcd2a169e57e125a6cf999250e3171210f937", "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.43.1@sha256:e8b6f8db3d7fd5b908718533dd437d093e9abbe39ee207be72cfc49e0348ef40", "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.43.1@sha256:e71bb27bee7f9c8789aa128ec3b8d684c45e825905c91cb0dd6988c168e7c654", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.43.1@sha256:8e5913a83252d27eda625b30cd4cd1a12138acdb2dbfec514c53d5b02bfd5cb2",
             # This is gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim
             "-gsutil-image", "gcr.io/google.com/cloudsdktool/cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f",
             # The shell image must allow root in order to create directories and copy files to PVCs.
