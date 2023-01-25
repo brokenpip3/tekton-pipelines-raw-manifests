@@ -70,9 +70,6 @@ data:
   # This is an experimental feature and thus should still be considered
   # an alpha feature.
   enable-tekton-oci-bundles: "false"
-  # Setting this flag to "true" enables the use of custom tasks from
-  # within pipelines.
-  enable-custom-tasks: "true"
   # Setting this flag will determine which gated features are enabled.
   # Acceptable values are "stable", "beta", or "alpha".
   enable-api-fields: "stable"
@@ -92,10 +89,10 @@ data:
   # `PipelineRun` status. Set it to "minimal" to populate the `ChildReferences` field in the
   # `PipelineRun` status with name, kind, and API version information for each `TaskRun` and
   # `Run` in the `PipelineRun` instead. Set it to "both" to do both.
-  embedded-status: "full"
+  embedded-status: "minimal"
   # Setting this flag will determine the version for custom tasks created by PipelineRuns.
   # Acceptable values are "v1beta1" and "v1alpha1".
-  # The default is "v1alpha1".
-  custom-task-version: "v1alpha1"
+  # The default is "v1beta1".
+  custom-task-version: "v1beta1"
 
 ---
