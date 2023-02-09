@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: controller
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.44.0"
+    app.kubernetes.io/version: "v0.41.1"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.44.0"
+    pipeline.tekton.dev/release: "v0.41.1"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.44.0"
+    version: "v0.41.1"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: controller
         app.kubernetes.io/component: controller
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.44.0"
+        app.kubernetes.io/version: "v0.41.1"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.44.0"
+        pipeline.tekton.dev/release: "v0.41.1"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-controller
-        version: "v0.44.0"
+        version: "v0.41.1"
     spec:
       affinity:
         nodeAffinity:
@@ -61,11 +61,11 @@ spec:
       serviceAccountName: tekton-pipelines-controller
       containers:
         - name: tekton-pipelines-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.44.0@sha256:51e4c16fc4d0b18912106ff7fe37cc24c0667de6af468cdd1a9e9dc174039de1
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.41.1@sha256:d728453d349be707243966c7eef3d0fa877727b03987dd5389d4a2c75dfc1aac
           args: [
             # These images are built on-demand by `ko resolve` and are replaced
             # by image references by digest.
-            "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.44.0@sha256:baa4110837ef91c3ec26a00f3c5d980fef174b97934cf2fc9115092ec78d35ee", "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.44.0@sha256:0be7d0cd52ba04baa136f987c74d80d171e3c1c86d47db8368825cfbe4d8df0b", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.44.0@sha256:779508dcf27d658148d532d59ff505d5afc45c6aa07111d12169a90be6a6a9d8", "-sidecarlogresults-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/sidecarlogresults:v0.44.0@sha256:4f3ac70c281f60de5634e3c8d4e17210a8d64aa6ae2d933739dbfc3cb674b8d0", "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.44.0@sha256:b65389daa312b9c1bfe9cc1d2c9066a877676034b4264b3576e3ccf8843b961d", "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.44.0@sha256:c80af31a67027b9e9dc9b710856ecda8137348bb82aefb1dd59949039ea17fc2", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.44.0@sha256:58d1145c65711eda6198c5b8d3a0d36955f0a56d732c961d29cab4381cbce644",
+            "-kubeconfig-writer-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.41.1@sha256:bbb3d7e89a3bfdc00f421ebcaf5973eb1e5d1ab135fa5a3f701c49a3e4755b3e", "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.41.1@sha256:4cdee5ddc62599c1f0753e64aff6f9d945c4e720fd760f10bc093acb91650d38", "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.41.1@sha256:057eaa68ba900cf86ea99ff818b44bb4f92e4731baa99a2571040fdffdc3f76a", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.41.1@sha256:ef9541a42464ebe2d0358ebffd02cc88dac4c6fc75f07471559107dc7f5469ef", "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.41.1@sha256:207d00456c2e0be618231f69c0665f25ab0f09dd283c046a93dee40d0b116ac0", "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.41.1@sha256:d8d89a1904a572cc7844274fbe3b175ce3196a478351257f6cef7396abcbdfe8", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.41.1@sha256:cc5b74b7797ea828e4e299103bf2ddb047af9097fd80af77e99adc4ef49ead01",
             # This is gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim
             "-gsutil-image", "gcr.io/google.com/cloudsdktool/cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f",
             # The shell image must allow root in order to create directories and copy files to PVCs.
@@ -80,10 +80,6 @@ spec:
               mountPath: /etc/config-logging
             - name: config-registry-cert
               mountPath: /etc/config-registry-cert
-            # Mount secret for trusted resources
-            - name: verification-secrets
-              mountPath: /etc/verification-secrets
-              readOnly: true
           env:
             - name: SYSTEM_NAMESPACE
               valueFrom:
@@ -106,21 +102,12 @@ spec:
               value: feature-flags
             - name: CONFIG_LEADERELECTION_NAME
               value: config-leader-election
-            - name: CONFIG_TRUSTED_RESOURCES_NAME
-              value: config-trusted-resources
             - name: SSL_CERT_FILE
               value: /etc/config-registry-cert/cert
             - name: SSL_CERT_DIR
               value: /etc/ssl/certs
             - name: METRICS_DOMAIN
               value: tekton.dev/pipeline
-              # The following variables can be uncommented with correct values to enable Jaeger tracing
-              #- name: OTEL_EXPORTER_JAEGER_ENDPOINT
-              #  value: http://jaeger-collector.jaeger:14268/api/traces
-              #- name: OTEL_EXPORTER_JAEGER_USER
-              #  value: username
-              #- name: OTEL_EXPORTER_JAEGER_PASSWORD
-              #  value: password
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -162,9 +149,4 @@ spec:
         - name: config-registry-cert
           configMap:
             name: config-registry-cert
-        # Mount secret for trusted resources
-        - name: verification-secrets
-          secret:
-            secretName: verification-secrets
-            optional: true
 ---

@@ -31,7 +31,6 @@ rules:
       - pipelineruns
       - pipelineresources
       - runs
-      - customruns
     verbs:
       - create
       - delete
