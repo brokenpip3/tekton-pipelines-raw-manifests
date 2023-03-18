@@ -19,7 +19,6 @@ rules:
       - tasks.tekton.dev
       - clustertasks.tekton.dev
       - taskruns.tekton.dev
-      - pipelineresources.tekton.dev
       - resolutionrequests.resolution.tekton.dev
       - customruns.tekton.dev
       - verificationpolicies.tekton.dev
