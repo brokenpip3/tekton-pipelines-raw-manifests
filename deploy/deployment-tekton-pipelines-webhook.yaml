@@ -24,12 +24,12 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.46.0"
+    app.kubernetes.io/version: "v0.41.2"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.46.0"
+    pipeline.tekton.dev/release: "v0.41.2"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.46.0"
+    version: "v0.41.2"
 spec:
   selector:
     matchLabels:
@@ -43,13 +43,13 @@ spec:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/component: webhook
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.46.0"
+        app.kubernetes.io/version: "v0.41.2"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.46.0"
+        pipeline.tekton.dev/release: "v0.41.2"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-webhook
-        version: "v0.46.0"
+        version: "v0.41.2"
     spec:
       affinity:
         nodeAffinity:
@@ -76,7 +76,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.46.0@sha256:5dc383dc1bd71d81180e0e4da68be966ebf383cfd0ac9f53a72cff11463e7f59
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.41.2@sha256:0fc0f6df4d4ef1ca7f84783487a6cbd3754191c6bd278b0ec1c2e8e5b2662f13
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
@@ -101,19 +101,6 @@ spec:
               value: config-leader-election
             - name: CONFIG_FEATURE_FLAGS_NAME
               value: feature-flags
-            # If you change WEBHOOK_PORT, you will also need to change the
-            # containerPort "https-webhook" to the same value.
-            - name: WEBHOOK_PORT
-              value: "8443"
-            # if you change WEBHOOK_ADMISSION_CONTROLLER_NAME, you will also need to update
-            # the webhooks.name in 500-webhooks.yaml to include the new names of admission webhooks.
-            # Additionally, you will also need to change the resource names (metadata.name) of
-            # "MutatingWebhookConfiguration" and "ValidatingWebhookConfiguration" in 500-webhooks.yaml
-            # to reflect the change in the name of the admission webhook.
-            # Followed by changing the webhook's Role in 200-clusterrole.yaml to update the "resourceNames" of
-            # "mutatingwebhookconfigurations" and "validatingwebhookconfigurations" resources.
-            - name: WEBHOOK_ADMISSION_CONTROLLER_NAME
-              value: webhook.pipeline.tekton.dev
             - name: WEBHOOK_SERVICE_NAME
               value: tekton-pipelines-webhook
             - name: WEBHOOK_SECRET_NAME
@@ -136,7 +123,6 @@ spec:
               containerPort: 9090
             - name: profiling
               containerPort: 8008
-            # This must match the value of the environment variable WEBHOOK_PORT.
             - name: https-webhook
               containerPort: 8443
             - name: probes
