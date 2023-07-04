@@ -20,12 +20,12 @@ metadata:
     app.kubernetes.io/name: resolvers
     app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.47.3"
+    app.kubernetes.io/version: "v0.44.4"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.47.3"
+    pipeline.tekton.dev/release: "v0.44.4"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.47.3"
+    version: "v0.44.4"
 spec:
   replicas: 1
   selector:
@@ -40,13 +40,13 @@ spec:
         app.kubernetes.io/name: resolvers
         app.kubernetes.io/component: resolvers
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.47.3"
+        app.kubernetes.io/version: "v0.44.4"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.47.3"
+        pipeline.tekton.dev/release: "v0.44.4"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-resolvers
-        version: "v0.47.3"
+        version: "v0.44.4"
     spec:
       affinity:
         podAntiAffinity:
@@ -63,14 +63,14 @@ spec:
       serviceAccountName: tekton-pipelines-resolvers
       containers:
         - name: controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.47.3@sha256:ea46db5fd1c6c1774762fee57cb49aef6a9a6ba862c85232c8a89f1ab67b43fd
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.44.4@sha256:ce3480d47df921c96c234f62a284a8a61c0a2da7a6cd8a9243337f9e6675caff
           resources:
             requests:
               cpu: 100m
               memory: 100Mi
             limits:
               cpu: 1000m
-              memory: 4Gi
+              memory: 1000Mi
           ports:
             - name: metrics
               containerPort: 9090
