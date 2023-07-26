@@ -18,6 +18,7 @@ resources:
 - configmap-config-artifact-bucket.yaml
 - configmap-config-artifact-pvc.yaml
 - configmap-config-defaults.yaml
+- configmap-config-events.yaml
 - configmap-config-leader-election.yaml
 - configmap-config-logging.yaml
 - configmap-config-observability.yaml

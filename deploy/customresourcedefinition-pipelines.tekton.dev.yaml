@@ -19,15 +19,15 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.44.4"
-    version: "v0.44.4"
+    pipeline.tekton.dev/release: "v0.50.0"
+    version: "v0.50.0"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
   versions:
     - name: v1beta1
       served: true
-      storage: true
+      storage: false
       subresources:
         status: {}
       schema:
@@ -43,7 +43,7 @@ spec:
           x-kubernetes-preserve-unknown-fields: true
     - name: v1
       served: true
-      storage: false
+      storage: true
       schema:
         openAPIV3Schema:
           type: object
