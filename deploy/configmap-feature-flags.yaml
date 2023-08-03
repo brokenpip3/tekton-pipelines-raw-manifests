@@ -30,18 +30,6 @@ data:
   # https://github.com/tektoncd/pipeline/blob/main/docs/workspaces.md#affinity-assistant-and-specifying-workspace-order-in-a-pipeline
   # or https://github.com/tektoncd/pipeline/pull/2630 for more info.
   disable-affinity-assistant: "false"
-  # Setting this flag will determine how PipelineRun Pods are scheduled with Affinity Assistant.
-  # Acceptable values are "workspaces" (default), "pipelineruns", "isolate-pipelinerun", or "disabled".
-  #
-  # Setting it to "workspaces" will schedule all the taskruns sharing the same PVC-based workspace in a pipelinerun to the same node.
-  # Setting it to "pipelineruns" will schedule all the taskruns in a pipelinerun to the same node.
-  # Setting it to "isolate-pipelinerun" will schedule all the taskruns in a pipelinerun to the same node,
-  # and only allows one pipelinerun to run on a node at a time.
-  # Setting it to "disabled" will not apply any coschedule policy.
-  #
-  # TODO: add links to documentation and migration strategy
-  # NOTE: this feature is still under development and not yet functional.
-  coschedule: "workspaces"
   # Setting this flag to "true" will prevent Tekton scanning attached
   # service accounts and injecting any credentials it finds into your
   # Steps.
@@ -84,7 +72,7 @@ data:
   enable-tekton-oci-bundles: "false"
   # Setting this flag will determine which gated features are enabled.
   # Acceptable values are "stable", "beta", or "alpha".
-  enable-api-fields: "beta"
+  enable-api-fields: "stable"
   # Setting this flag to "true" enables CloudEvents for CustomRuns and Runs, as long as a
   # CloudEvents sink is configured in the config-defaults config map
   send-cloudevents-for-runs: "false"
@@ -97,20 +85,11 @@ data:
   # and PipelineRun status. This field contains metadata about resources used
   # in the TaskRun/PipelineRun such as the source from where a remote Task/Pipeline
   # definition was fetched.
-  enable-provenance-in-status: "true"
+  enable-provenance-in-status: "false"
   # Setting this flag will determine how Tekton pipelines will handle non-falsifiable provenance.
   # If set to "spire", then SPIRE will be used to ensure non-falsifiable provenance.
   # If set to "none", then Tekton will not have non-falsifiable provenance.
   # This is an experimental feature and thus should still be considered an alpha feature.
   enforce-nonfalsifiablity: "none"
-  # Setting this flag will determine how Tekton pipelines will handle extracting results from the task.
-  # Acceptable values are "termination-message" or "sidecar-logs".
-  # "sidecar-logs" is an experimental feature and thus should still be considered
-  # an alpha feature.
-  results-from: "termination-message"
-  # Setting this flag to "true" will limit privileges for containers injected by Tekton into TaskRuns.
-  # This allows TaskRuns to run in namespaces with "restricted" pod security standards.
-  # Not all Kubernetes implementations support this option.
-  set-security-context: "false"
 
 ---
