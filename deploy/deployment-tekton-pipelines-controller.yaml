@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: controller
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.47.4"
+    app.kubernetes.io/version: "v0.50.1"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.47.4"
+    pipeline.tekton.dev/release: "v0.50.1"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.47.4"
+    version: "v0.50.1"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: controller
         app.kubernetes.io/component: controller
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.47.4"
+        app.kubernetes.io/version: "v0.50.1"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.47.4"
+        pipeline.tekton.dev/release: "v0.50.1"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-controller
-        version: "v0.47.4"
+        version: "v0.50.1"
     spec:
       affinity:
         nodeAffinity:
@@ -61,11 +61,11 @@ spec:
       serviceAccountName: tekton-pipelines-controller
       containers:
         - name: tekton-pipelines-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.47.4@sha256:7bbdc727c6b4d0be8693ea82d710623232ebd32ee5b4b616a1e84de07ff7e3b5
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.50.1@sha256:9025991c337374dadce6d49e29fbcf86b233ab8f5f96748c67293b2285c3e0b6
           args: [
             # These images are built on-demand by `ko resolve` and are replaced
             # by image references by digest.
-            "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.47.4@sha256:a92f54c2ef87dbe0649f9ad98856bef839b8ede61021edfd2883989cb7ac45b7", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.47.4@sha256:10956f7e43bc1387e488c82a9255dab69c3182f0f9bae5a607c531745127a1af", "-sidecarlogresults-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/sidecarlogresults:v0.47.4@sha256:f84d8a51f544ea3086dba91e67ec6f779d9e943b0536e994a51c5118a3fc0034", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.47.4@sha256:7219e0da69dc6213803640eaae2c9263770bb5ebd5558285c27006d9f8b5e5c6",
+            "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.50.1@sha256:0c66040a16142a598d5aa9f310b1cbf66e843aa7114188f5d0ab5d36b463a09b", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.50.1@sha256:537f2e9884fb14d5b42f1d749c62d7404bf061ec8983a07a15a556a2b560875a", "-sidecarlogresults-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/sidecarlogresults:v0.50.1@sha256:dbcbd3b156ac74539f25780f639891489130fdee72871351e5a8b9ff194cc7bb", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.50.1@sha256:cdce382e0e5fa8e29132f1cbae8de2610f050ad5db9a355a5a93b913a03b209f",
             # The shell image must allow root in order to create directories and copy files to PVCs.
             # cgr.dev/chainguard/busybox as of April 14 2022
             # image shall not contains tag, so it will be supported on a runtime like cri-o
@@ -92,10 +92,6 @@ spec:
               value: config-logging
             - name: CONFIG_OBSERVABILITY_NAME
               value: config-observability
-            - name: CONFIG_ARTIFACT_BUCKET_NAME
-              value: config-artifact-bucket
-            - name: CONFIG_ARTIFACT_PVC_NAME
-              value: config-artifact-pvc
             - name: CONFIG_FEATURE_FLAGS_NAME
               value: feature-flags
             - name: CONFIG_LEADERELECTION_NAME

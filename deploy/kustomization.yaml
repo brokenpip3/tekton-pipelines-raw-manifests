@@ -49,7 +49,6 @@ resources:
 - mutatingwebhookconfiguration-webhook.pipeline.tekton.dev.yaml
 - namespace-tekton-pipelines-resolvers.yaml
 - namespace-tekton-pipelines.yaml
-- podsecuritypolicy-tekton-pipelines.yaml
 - role-tekton-pipelines-controller.yaml
 - role-tekton-pipelines-info.yaml
 - role-tekton-pipelines-leader-election.yaml
