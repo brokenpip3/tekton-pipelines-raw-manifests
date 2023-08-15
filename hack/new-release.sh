@@ -7,6 +7,8 @@
 RELEASE="$1"
 URL="https://storage.googleapis.com/tekton-releases/pipeline/previous/${RELEASE}/release.yaml"
 
+rm *.yaml #Remove old files
+
 curl -s -L -O "$URL" > /dev/null
 
 csplit --prefix=tk-operator release.yaml \
@@ -22,7 +24,6 @@ for file in tk-operator*; do
 done
 
 rm release.yaml
-rm kustomization.yaml 
+rm kustomization.yaml
 
 kustomize create --autodetect
-
