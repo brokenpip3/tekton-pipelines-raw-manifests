@@ -26,9 +26,11 @@ data:
   #
   # The default behaviour is for Tekton to create Affinity Assistants
   #
-  # See more in the workspace documentation about Affinity Assistant
-  # https://github.com/tektoncd/pipeline/blob/main/docs/workspaces.md#affinity-assistant-and-specifying-workspace-order-in-a-pipeline
+  # See more in the Affinity Assistant documentation
+  # https://github.com/tektoncd/pipeline/blob/main/docs/affinityassistants.md
   # or https://github.com/tektoncd/pipeline/pull/2630 for more info.
+  #
+  # Note: This feature flag is deprecated and will be removed in release v0.60. Consider using `coschedule` feature flag to configure Affinity Assistant behavior.
   disable-affinity-assistant: "false"
   # Setting this flag will determine how PipelineRun Pods are scheduled with Affinity Assistant.
   # Acceptable values are "workspaces" (default), "pipelineruns", "isolate-pipelinerun", or "disabled".
@@ -39,8 +41,8 @@ data:
   # and only allows one pipelinerun to run on a node at a time.
   # Setting it to "disabled" will not apply any coschedule policy.
   #
-  # TODO: add links to documentation and migration strategy
-  # NOTE: this feature is still under development and not yet functional.
+  # See more in the Affinity Assistant documentation
+  # https://github.com/tektoncd/pipeline/blob/main/docs/affinityassistants.md
   coschedule: "workspaces"
   # Setting this flag to "true" will prevent Tekton scanning attached
   # service accounts and injecting any credentials it finds into your
@@ -102,7 +104,7 @@ data:
   # If set to "spire", then SPIRE will be used to ensure non-falsifiable provenance.
   # If set to "none", then Tekton will not have non-falsifiable provenance.
   # This is an experimental feature and thus should still be considered an alpha feature.
-  enforce-nonfalsifiablity: "none"
+  enforce-nonfalsifiability: "none"
   # Setting this flag will determine how Tekton pipelines will handle extracting results from the task.
   # Acceptable values are "termination-message" or "sidecar-logs".
   # "sidecar-logs" is an experimental feature and thus should still be considered
