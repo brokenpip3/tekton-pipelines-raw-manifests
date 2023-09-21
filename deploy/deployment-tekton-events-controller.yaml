@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: events
     app.kubernetes.io/component: events
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.51.0"
+    app.kubernetes.io/version: "v0.52.0"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.51.0"
+    pipeline.tekton.dev/release: "v0.52.0"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.51.0"
+    version: "v0.52.0"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: events
         app.kubernetes.io/component: events
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.51.0"
+        app.kubernetes.io/version: "v0.52.0"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.51.0"
+        pipeline.tekton.dev/release: "v0.52.0"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-events-controller
-        version: "v0.51.0"
+        version: "v0.52.0"
     spec:
       affinity:
         nodeAffinity:
@@ -61,7 +61,7 @@ spec:
       serviceAccountName: tekton-events-controller
       containers:
         - name: tekton-events-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/events:v0.51.0@sha256:72582e0269c43978bb8e1484c710b6062f4ad37ea2634eefc4f3eb86193bb21d
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/events:v0.52.0@sha256:c1285a31a86fe97be4628af69852a9d45c1a24de9cb08b6f6ededa3a55b7a38f
           args: []
           volumeMounts:
             - name: config-logging

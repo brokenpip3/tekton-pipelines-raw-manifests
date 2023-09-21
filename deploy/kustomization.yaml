@@ -22,6 +22,7 @@ resources:
 - configmap-config-observability.yaml
 - configmap-config-registry-cert.yaml
 - configmap-config-spire.yaml
+- configmap-config-tracing.yaml
 - configmap-feature-flags.yaml
 - configmap-git-resolver-config.yaml
 - configmap-hubresolver-config.yaml
