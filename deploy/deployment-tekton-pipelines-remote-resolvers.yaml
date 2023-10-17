@@ -20,12 +20,12 @@ metadata:
     app.kubernetes.io/name: resolvers
     app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.52.1"
+    app.kubernetes.io/version: "v0.50.2"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.52.1"
+    pipeline.tekton.dev/release: "v0.50.2"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.52.1"
+    version: "v0.50.2"
 spec:
   replicas: 1
   selector:
@@ -40,13 +40,13 @@ spec:
         app.kubernetes.io/name: resolvers
         app.kubernetes.io/component: resolvers
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.52.1"
+        app.kubernetes.io/version: "v0.50.2"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.52.1"
+        pipeline.tekton.dev/release: "v0.50.2"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-resolvers
-        version: "v0.52.1"
+        version: "v0.50.2"
     spec:
       affinity:
         podAntiAffinity:
@@ -63,7 +63,7 @@ spec:
       serviceAccountName: tekton-pipelines-resolvers
       containers:
         - name: controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.52.1@sha256:e7e1f84a576a44118aef60916d6bfd5366143522a62d3b09238365f6556c244e
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.50.2@sha256:549031c6101ee4f4860229ca3143eb8850d9a16506a56a6a82082d149475811c
           resources:
             requests:
               cpu: 100m
@@ -74,11 +74,6 @@ spec:
           ports:
             - name: metrics
               containerPort: 9090
-            - name: profiling
-              containerPort: 8008
-            # This must match the value of the environment variable PROBES_PORT.
-            - name: probes
-              containerPort: 8080
           env:
             - name: SYSTEM_NAMESPACE
               valueFrom:
@@ -97,9 +92,7 @@ spec:
               value: config-leader-election
             - name: METRICS_DOMAIN
               value: tekton.dev/resolution
-            - name: PROBES_PORT
-              value: "8080"
-              # Override this env var to set a private hub api endpoint
+            # Override this env var to set a private hub api endpoint
             - name: ARTIFACT_HUB_API
               value: "https://artifacthub.io/"
           securityContext:

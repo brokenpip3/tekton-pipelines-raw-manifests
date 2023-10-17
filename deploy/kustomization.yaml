@@ -22,7 +22,6 @@ resources:
 - configmap-config-observability.yaml
 - configmap-config-registry-cert.yaml
 - configmap-config-spire.yaml
-- configmap-config-tracing.yaml
 - configmap-feature-flags.yaml
 - configmap-git-resolver-config.yaml
 - configmap-hubresolver-config.yaml
@@ -45,15 +44,14 @@ resources:
 - namespace-tekton-pipelines-resolvers.yaml
 - namespace-tekton-pipelines.yaml
 - role-tekton-pipelines-controller.yaml
-- role-tekton-pipelines-events-controller.yaml
 - role-tekton-pipelines-info.yaml
 - role-tekton-pipelines-leader-election.yaml
 - role-tekton-pipelines-resolvers-namespace-rbac.yaml
 - role-tekton-pipelines-webhook.yaml
 - rolebinding-tekton-events-controller-leaderelection.yaml
+- rolebinding-tekton-events-controller.yaml
 - rolebinding-tekton-pipelines-controller-leaderelection.yaml
 - rolebinding-tekton-pipelines-controller.yaml
-- rolebinding-tekton-pipelines-events-controller.yaml
 - rolebinding-tekton-pipelines-info.yaml
 - rolebinding-tekton-pipelines-resolvers-namespace-rbac.yaml
 - rolebinding-tekton-pipelines-webhook-leaderelection.yaml
@@ -61,7 +59,6 @@ resources:
 - secret-webhook-certs.yaml
 - service-tekton-events-controller.yaml
 - service-tekton-pipelines-controller.yaml
-- service-tekton-pipelines-remote-resolvers.yaml
 - service-tekton-pipelines-webhook.yaml
 - serviceaccount-tekton-events-controller.yaml
 - serviceaccount-tekton-pipelines-controller.yaml
