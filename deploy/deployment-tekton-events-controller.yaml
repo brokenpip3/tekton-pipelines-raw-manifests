@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: events
     app.kubernetes.io/component: events
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.50.3"
+    app.kubernetes.io/version: "v0.53.0"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.50.3"
+    pipeline.tekton.dev/release: "v0.53.0"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.50.3"
+    version: "v0.53.0"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: events
         app.kubernetes.io/component: events
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.50.3"
+        app.kubernetes.io/version: "v0.53.0"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.50.3"
+        pipeline.tekton.dev/release: "v0.53.0"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-events-controller
-        version: "v0.50.3"
+        version: "v0.53.0"
     spec:
       affinity:
         nodeAffinity:
@@ -61,7 +61,7 @@ spec:
       serviceAccountName: tekton-events-controller
       containers:
         - name: tekton-events-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/events:v0.50.3@sha256:e769337d25df4c4f556d67ff7694d1fe52fa07b4d2716ed482b131d9f195165e
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/events:v0.53.0@sha256:340e1edd0783bdb86e396ef53499f068a42da1986a1d806ab652b448869637bd
           args: []
           volumeMounts:
             - name: config-logging
@@ -83,7 +83,7 @@ spec:
             - name: CONFIG_OBSERVABILITY_NAME
               value: config-observability
             - name: CONFIG_LEADERELECTION_NAME
-              value: config-leader-election
+              value: config-leader-election-events
             - name: SSL_CERT_FILE
               value: /etc/config-registry-cert/cert
             - name: SSL_CERT_DIR

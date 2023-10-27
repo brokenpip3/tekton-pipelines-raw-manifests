@@ -1,4 +1,4 @@
-# Copyright 2019 The Tekton Authors
+# Copyright 2023 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: pipelines.tekton.dev
+  name: stepactions.tekton.dev
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
@@ -25,11 +25,9 @@ spec:
   group: tekton.dev
   preserveUnknownFields: false
   versions:
-    - name: v1beta1
+    - name: v1alpha1
       served: true
-      storage: false
-      subresources:
-        status: {}
+      storage: true
       schema:
         openAPIV3Schema:
           type: object
@@ -41,39 +39,17 @@ spec:
           # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
           # See issue: https://github.com/knative/serving/issues/912
           x-kubernetes-preserve-unknown-fields: true
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
-          # OpenAPIV3 schema allows Kubernetes to perform validation on the schema fields
-          # and use the schema in tooling such as `kubectl explain`.
-          # Using "x-kubernetes-preserve-unknown-fields: true"
-          # at the root of the schema (or within it) allows arbitrary fields.
-          # We currently perform our own validation separately.
-          # See https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#specifying-a-structural-schema
-          # for more info.
-          x-kubernetes-preserve-unknown-fields: true
       # Opt into the status subresource so metadata.generation
       # starts to increment
       subresources:
         status: {}
   names:
-    kind: Pipeline
-    plural: pipelines
-    singular: pipeline
+    kind: StepAction
+    plural: stepactions
+    singular: stepaction
     categories:
       - tekton
       - tekton-pipelines
   scope: Namespaced
-  conversion:
-    strategy: Webhook
-    webhook:
-      conversionReviewVersions: ["v1beta1", "v1"]
-      clientConfig:
-        service:
-          name: tekton-pipelines-webhook
-          namespace: tekton-pipelines
 
 ---
