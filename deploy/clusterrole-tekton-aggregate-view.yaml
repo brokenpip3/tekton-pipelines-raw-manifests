@@ -30,7 +30,6 @@ rules:
       - pipelineruns
       - runs
       - customruns
-      - stepactions
     verbs:
       - get
       - list

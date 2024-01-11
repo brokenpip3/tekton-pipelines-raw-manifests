@@ -31,7 +31,6 @@ rules:
       - pipelineruns
       - runs
       - customruns
-      - stepactions
     verbs:
       - create
       - delete

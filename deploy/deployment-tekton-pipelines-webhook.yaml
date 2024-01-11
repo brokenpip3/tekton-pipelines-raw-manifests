@@ -24,12 +24,12 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.55.0"
+    app.kubernetes.io/version: "v0.47.6"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.55.0"
+    pipeline.tekton.dev/release: "v0.47.6"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.55.0"
+    version: "v0.47.6"
 spec:
   selector:
     matchLabels:
@@ -43,13 +43,13 @@ spec:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/component: webhook
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.55.0"
+        app.kubernetes.io/version: "v0.47.6"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.55.0"
+        pipeline.tekton.dev/release: "v0.47.6"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-webhook
-        version: "v0.55.0"
+        version: "v0.47.6"
     spec:
       affinity:
         nodeAffinity:
@@ -76,7 +76,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.55.0@sha256:908560b1e1e6aca3672972013e93ff6047c610770c43f98fda52f125211eef00
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.47.6@sha256:f4ecad9aa6a4136678df91f4eb65cf298f9720fd567a91ca6fb82d2f738f9b23
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
@@ -98,13 +98,9 @@ spec:
             - name: CONFIG_OBSERVABILITY_NAME
               value: config-observability
             - name: CONFIG_LEADERELECTION_NAME
-              value: config-leader-election-webhook
+              value: config-leader-election
             - name: CONFIG_FEATURE_FLAGS_NAME
               value: feature-flags
-            # If you change PROBES_PORT, you will also need to change the
-            # containerPort "probes" to the same value.
-            - name: PROBES_PORT
-              value: "8080"
             # If you change WEBHOOK_PORT, you will also need to change the
             # containerPort "https-webhook" to the same value.
             - name: WEBHOOK_PORT
@@ -143,7 +139,6 @@ spec:
             # This must match the value of the environment variable WEBHOOK_PORT.
             - name: https-webhook
               containerPort: 8443
-            # This must match the value of the environment variable PROBES_PORT.
             - name: probes
               containerPort: 8080
           livenessProbe:
