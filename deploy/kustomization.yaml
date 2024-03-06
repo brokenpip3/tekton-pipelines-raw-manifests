@@ -28,7 +28,6 @@ resources:
 - configmap-config-tracing.yaml
 - configmap-feature-flags.yaml
 - configmap-git-resolver-config.yaml
-- configmap-http-resolver-config.yaml
 - configmap-hubresolver-config.yaml
 - configmap-pipelines-info.yaml
 - configmap-resolvers-feature-flags.yaml
