@@ -20,12 +20,12 @@ metadata:
     app.kubernetes.io/name: resolvers
     app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.53.4"
+    app.kubernetes.io/version: "v0.56.2"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.53.4"
+    pipeline.tekton.dev/release: "v0.56.2"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.53.4"
+    version: "v0.56.2"
 spec:
   replicas: 1
   selector:
@@ -40,13 +40,13 @@ spec:
         app.kubernetes.io/name: resolvers
         app.kubernetes.io/component: resolvers
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.53.4"
+        app.kubernetes.io/version: "v0.56.2"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.53.4"
+        pipeline.tekton.dev/release: "v0.56.2"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-resolvers
-        version: "v0.53.4"
+        version: "v0.56.2"
     spec:
       affinity:
         podAntiAffinity:
@@ -63,7 +63,7 @@ spec:
       serviceAccountName: tekton-pipelines-resolvers
       containers:
         - name: controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.53.4@sha256:03fdad69a98fb89e705575b915a2cde5485bb0e44579423e5ad53c60be822b95
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.56.2@sha256:33590c6e9c1537b0e4d788d69739537679193153f4c3aba04f6440e05f21e891
           resources:
             requests:
               cpu: 100m
