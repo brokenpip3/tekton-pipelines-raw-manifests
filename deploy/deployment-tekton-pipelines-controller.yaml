@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: controller
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.58.0"
+    app.kubernetes.io/version: "v0.56.3"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.58.0"
+    pipeline.tekton.dev/release: "v0.56.3"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.58.0"
+    version: "v0.56.3"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: controller
         app.kubernetes.io/component: controller
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.58.0"
+        app.kubernetes.io/version: "v0.56.3"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.58.0"
+        pipeline.tekton.dev/release: "v0.56.3"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-controller
-        version: "v0.58.0"
+        version: "v0.56.3"
     spec:
       affinity:
         nodeAffinity:
@@ -61,11 +61,11 @@ spec:
       serviceAccountName: tekton-pipelines-controller
       containers:
         - name: tekton-pipelines-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.58.0@sha256:23d14e0febf9e6ef3087ab8d96b298a387738659167c56713174f1328ec70bdd
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.56.3@sha256:f98c346cf1848efc0c5d95d559be4be51da281779bffc6687bd59ffc41eab030
           args: [
             # These images are built on-demand by `ko resolve` and are replaced
             # by image references by digest.
-            "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.58.0@sha256:b6503ff55a13ff0af83ed89d113a1a2aaf69ec8af83d0c8c69a35fc058bd202e", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.58.0@sha256:51b0e5b7461bdc638e86aadee7533514a3259cabb1e673c980f0634c2b848316", "-sidecarlogresults-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/sidecarlogresults:v0.58.0@sha256:c5353a8d2d012711d43cea12ce5af3374d760705456471ae80f7aa12034f1404", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.58.0@sha256:7db50c22a36809741a8de491d5bef8d06ba495cd57a7f3a42a5d9c9065881dbb",
+            "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.56.3@sha256:416a2ccb0a2b4d63f8c7df4d590aaad82028486100e7a7e1be26afe8c65dba51", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.56.3@sha256:7a28ef1eee543352dbd0c864b00c4ca694c2d2b58088ebf6542afa8aedeb7b5e", "-sidecarlogresults-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/sidecarlogresults:v0.56.3@sha256:d74829e48a9de7a7b7bfe4d93ccc1ca4ca1660498287e7dce2915bf242094f04", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.56.3@sha256:df2d6e6891b8d2596667234d9dfa7c8cc8746c5dbf684cbe3b430a5c83c38bf1",
             # The shell image must allow root in order to create directories and copy files to PVCs.
             # cgr.dev/chainguard/busybox as of April 14 2022
             # image shall not contains tag, so it will be supported on a runtime like cri-o
