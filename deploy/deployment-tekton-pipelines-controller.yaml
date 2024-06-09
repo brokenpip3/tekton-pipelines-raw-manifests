@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: controller
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.60.1"
+    app.kubernetes.io/version: "v0.53.7"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.60.1"
+    pipeline.tekton.dev/release: "v0.53.7"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.60.1"
+    version: "v0.53.7"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: controller
         app.kubernetes.io/component: controller
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.60.1"
+        app.kubernetes.io/version: "v0.53.7"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.60.1"
+        pipeline.tekton.dev/release: "v0.53.7"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-controller
-        version: "v0.60.1"
+        version: "v0.53.7"
     spec:
       affinity:
         nodeAffinity:
@@ -61,11 +61,11 @@ spec:
       serviceAccountName: tekton-pipelines-controller
       containers:
         - name: tekton-pipelines-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.60.1@sha256:dbdc44a13dc345d45c59d0e0688663f8530c141a56b3f294fa6c0b3c1edb9e18
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.53.7@sha256:d5155f45e3eef9d165bd62ff3fdbc2aeda30538e765862bb23d835a1df6529c0
           args: [
             # These images are built on-demand by `ko resolve` and are replaced
             # by image references by digest.
-            "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.60.1@sha256:e0aa781d18185d7ff98c89673ee590425b65786e02f1e10a8b31ea5eb7e62717", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.60.1@sha256:aa9cf6d0cd3f0fa99ab027340179f57af925dab7472161c06b0a2ac19a6dc8cb", "-sidecarlogresults-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/sidecarlogresults:v0.60.1@sha256:52d62cf7262007c5d8ced8989ff71af22e0f317c84938ca88aa86f97d047b506", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.60.1@sha256:2a15fc43350a662ad50ab06fbbe142d98c418b0cd7329f24b6b0cf81e81678d1",
+            "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.53.7@sha256:46ff98cae7bd5944ecc10b3be0f5330d439257d8359a2be63c3fb716e9a3534c", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.53.7@sha256:e99c64cd167a5eb5023e492d3c4d49fda7af1d68d54dd873fe382bfb9c846bee", "-sidecarlogresults-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/sidecarlogresults:v0.53.7@sha256:114ea219d35ef4f8950bd2d8e6a7ea5f1516b0d08e2d978f8a6fe2ad8169d85a", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.53.7@sha256:11bd34d455cd49035afb8f3f3b61967f993a350e53fd165cd1ffd9220b0f1c11",
             # The shell image must allow root in order to create directories and copy files to PVCs.
             # cgr.dev/chainguard/busybox as of April 14 2022
             # image shall not contains tag, so it will be supported on a runtime like cri-o
@@ -104,6 +104,13 @@ spec:
               value: /etc/ssl/certs
             - name: METRICS_DOMAIN
               value: tekton.dev/pipeline
+              # The following variables can be uncommented with correct values to enable Jaeger tracing
+              #- name: OTEL_EXPORTER_JAEGER_ENDPOINT
+              #  value: http://jaeger-collector.jaeger:14268/api/traces
+              #- name: OTEL_EXPORTER_JAEGER_USER
+              #  value: username
+              #- name: OTEL_EXPORTER_JAEGER_PASSWORD
+              #  value: password
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
