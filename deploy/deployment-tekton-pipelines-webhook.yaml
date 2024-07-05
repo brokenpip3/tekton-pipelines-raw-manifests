@@ -24,12 +24,12 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.61.0"
+    app.kubernetes.io/version: "v0.59.2"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.61.0"
+    pipeline.tekton.dev/release: "v0.59.2"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.61.0"
+    version: "v0.59.2"
 spec:
   selector:
     matchLabels:
@@ -43,13 +43,13 @@ spec:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/component: webhook
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.61.0"
+        app.kubernetes.io/version: "v0.59.2"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.61.0"
+        pipeline.tekton.dev/release: "v0.59.2"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-webhook
-        version: "v0.61.0"
+        version: "v0.59.2"
     spec:
       affinity:
         nodeAffinity:
@@ -76,7 +76,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.61.0@sha256:65278d38e3d657650c2e00f3576d8d76dce442be47fd2c2ff086d3cf8ad8da7b
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.59.2@sha256:8c931f95cb7875b227cbd8de7e479136f2b32cfecd9de71ffe991d9c8aaae847
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
