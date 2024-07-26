@@ -24,12 +24,12 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.61.1"
+    app.kubernetes.io/version: "v0.62.0"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.61.1"
+    pipeline.tekton.dev/release: "v0.62.0"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.61.1"
+    version: "v0.62.0"
 spec:
   selector:
     matchLabels:
@@ -43,13 +43,13 @@ spec:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/component: webhook
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.61.1"
+        app.kubernetes.io/version: "v0.62.0"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.61.1"
+        pipeline.tekton.dev/release: "v0.62.0"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-webhook
-        version: "v0.61.1"
+        version: "v0.62.0"
     spec:
       affinity:
         nodeAffinity:
@@ -76,7 +76,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.61.1@sha256:b9e5dc555d41fbb8e9752bb9ba51ce3b7205081f174b7706a4dd193596d5eb35
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.62.0@sha256:e860efdac20bcbd9902acafac7c8ea93c692ded7a2ae2e7c4386fd85067e264f
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
@@ -126,6 +126,7 @@ spec:
               value: tekton.dev/pipeline
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - "ALL"
