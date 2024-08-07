@@ -30,7 +30,7 @@ rules:
     verbs: ["get", "list"]
   # Read-only access to these.
   - apiGroups: [""]
-    resources: ["secrets", "serviceaccounts"]
+    resources: ["secrets"]
     verbs: ["get", "list", "watch"]
 
 ---
