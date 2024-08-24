@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: events
     app.kubernetes.io/component: events
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.56.7"
+    app.kubernetes.io/version: "v0.62.2"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.56.7"
+    pipeline.tekton.dev/release: "v0.62.2"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.56.7"
+    version: "v0.62.2"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: events
         app.kubernetes.io/component: events
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.56.7"
+        app.kubernetes.io/version: "v0.62.2"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.56.7"
+        pipeline.tekton.dev/release: "v0.62.2"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-events-controller
-        version: "v0.56.7"
+        version: "v0.62.2"
     spec:
       affinity:
         nodeAffinity:
@@ -61,7 +61,7 @@ spec:
       serviceAccountName: tekton-events-controller
       containers:
         - name: tekton-events-controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/events:v0.56.7@sha256:f08117060d1a4badb87bf54108b51cb93fe68569519408169e6ae4ef7ada8408
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/events:v0.62.2@sha256:91842e97bbf05525b152b0eabd0557cc56126c21450787bcaa1876741f2d6f12
           args: []
           volumeMounts:
             - name: config-logging
@@ -90,6 +90,7 @@ spec:
               value: /etc/ssl/certs
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - "ALL"
