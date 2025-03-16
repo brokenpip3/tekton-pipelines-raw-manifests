@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.3.0
+  rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b  # frozen: v5.0.0
   hooks:
   - id: end-of-file-fixer
   - id: trailing-whitespace
@@ -11,8 +11,19 @@ repos:
      - --unsafe
 
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.19.2
+  rev: 828a213a1dd17aa9862aab706e3162c13281ff93  # frozen: 0.31.2
   hooks:
     - id: check-github-workflows
     - id: check-github-actions
     - id: check-dependabot
+
+- repo: https://github.com/k8s-at-home/sops-pre-commit
+  rev: bc51435089e5bc665a78cb53136f6403f00773e8  # frozen: v2.1.1
+  hooks:
+  - id: forbid-secrets
+
+- repo: https://github.com/brokenpip3/pre-commit-hooks
+  rev: dd7b3821637ba3c3a8628ad487fd84edec8006f2  # frozen: 0.0.1
+  hooks:
+    - id: github-actions-hash
+      files: ^.github/workflows/.*\.(yml|yaml)$ # limit only to github workflows
