@@ -9,11 +9,11 @@ jobs:
   raw-manifests:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     - name: Set up Python
-      uses: actions/setup-python@e9aba2c848f5ebd159c070c61ea2c4e2b122355e # v2
+      uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
       with:
-        python-version: "3.7"
+        python-version: "3.12"
     - name: Install dependencies
       run: |
         echo "downloading yq"
@@ -40,7 +40,7 @@ jobs:
       run: |
         cd deploy
         ../hack/new-release.sh ${RELEASE}
-    - uses: stefanzweifel/git-auto-commit-action@3ea6ae190baf489ba007f7c92608f33ce20ef04a # v4
+    - uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5.1.0
       with:
         commit_message: Automated Update to version ${{ steps.lastrelease.outputs.latest_tag }}
         branch: main
