@@ -40,7 +40,7 @@ jobs:
       run: |
         cd deploy
         ../hack/new-release.sh ${RELEASE}
-    - uses: stefanzweifel/git-auto-commit-action@3ea6ae190baf489ba007f7c92608f33ce20ef04a # v4
+    - uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v4
       with:
         commit_message: Automated Update to version ${{ steps.lastrelease.outputs.latest_tag }}
         branch: main
