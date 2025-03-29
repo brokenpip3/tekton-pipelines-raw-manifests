@@ -1,166 +1,413 @@
-# Copyright 2020 The Tekton Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  name: customruns.tekton.dev
-  labels:
-    app.kubernetes.io/instance: default
-    app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.70.0"
-    version: "v0.70.0"
-spec:
-  group: tekton.dev
-  preserveUnknownFields: false
-  versions:
-    - name: v1beta1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          description: CustomRun represents a single execution of a Custom Task.
-          type: object
-          properties:
-            apiVersion:
-              description: |-
-                APIVersion defines the versioned schema of this representation of an object.
-                Servers should convert recognized schemas to the latest internal value, and
-                may reject unrecognized values.
-                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-              type: string
-            kind:
-              description: |-
-                Kind is a string value representing the REST resource this object represents.
-                Servers may infer this from the endpoint the client submits requests to.
-                Cannot be updated.
-                In CamelCase.
-                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-              type: string
-            metadata:
-              type: object
-            spec:
-              description: CustomRunSpec defines the desired state of CustomRun
-              type: object
-              properties:
-                customRef:
-                  description: TaskRef can be used to refer to a specific instance of a task.
-                  type: object
-                  properties:
-                    apiVersion:
-                      description: |-
-                        API version of the referent
-                        Note: A Task with non-empty APIVersion and Kind is considered a Custom Task
-                      type: string
-                    bundle:
-                      description: |-
-                        Bundle url reference to a Tekton Bundle.
+                                If unset, the Kubelet will not modify the ownership and permissions of any volume.
+                                Note that this field cannot be set when spec.os.name is windows.
+                              type: integer
+                              format: int64
+                            fsGroupChangePolicy:
+                              description: |-
+                                fsGroupChangePolicy defines behavior of changing ownership and permission of the volume
+                                before being exposed inside Pod. This field will only apply to
+                                volume types which support fsGroup based ownership(and permissions).
+                                It will have no effect on ephemeral volume types such as: secret, configmaps
+                                and emptydir.
+                                Valid values are "OnRootMismatch" and "Always". If not specified, "Always" is used.
+                                Note that this field cannot be set when spec.os.name is windows.
+                              type: string
+                            runAsGroup:
+                              description: |-
+                                The GID to run the entrypoint of the container process.
+                                Uses runtime default if unset.
+                                May also be set in SecurityContext.  If set in both SecurityContext and
+                                PodSecurityContext, the value specified in SecurityContext takes precedence
+                                for that container.
+                                Note that this field cannot be set when spec.os.name is windows.
+                              type: integer
+                              format: int64
+                            runAsNonRoot:
+                              description: |-
+                                Indicates that the container must run as a non-root user.
+                                If true, the Kubelet will validate the image at runtime to ensure that it
+                                does not run as UID 0 (root) and fail to start the container if it does.
+                                If unset or false, no such validation will be performed.
+                                May also be set in SecurityContext.  If set in both SecurityContext and
+                                PodSecurityContext, the value specified in SecurityContext takes precedence.
+                              type: boolean
+                            runAsUser:
+                              description: |-
+                                The UID to run the entrypoint of the container process.
+                                Defaults to user specified in image metadata if unspecified.
+                                May also be set in SecurityContext.  If set in both SecurityContext and
+                                PodSecurityContext, the value specified in SecurityContext takes precedence
+                                for that container.
+                                Note that this field cannot be set when spec.os.name is windows.
+                              type: integer
+                              format: int64
+                            seLinuxOptions:
+                              description: |-
+                                The SELinux context to be applied to all containers.
+                                If unspecified, the container runtime will allocate a random SELinux context for each
+                                container.  May also be set in SecurityContext.  If set in
+                                both SecurityContext and PodSecurityContext, the value specified in SecurityContext
+                                takes precedence for that container.
+                                Note that this field cannot be set when spec.os.name is windows.
+                              type: object
+                              properties:
+                                level:
+                                  description: Level is SELinux level label that applies to the container.
+                                  type: string
+                                role:
+                                  description: Role is a SELinux role label that applies to the container.
+                                  type: string
+                                type:
+                                  description: Type is a SELinux type label that applies to the container.
+                                  type: string
+                                user:
+                                  description: User is a SELinux user label that applies to the container.
+                                  type: string
+                            seccompProfile:
+                              description: |-
+                                The seccomp options to use by the containers in this pod.
+                                Note that this field cannot be set when spec.os.name is windows.
+                              type: object
+                              required:
+                                - type
+                              properties:
+                                localhostProfile:
+                                  description: |-
+                                    localhostProfile indicates a profile defined in a file on the node should be used.
+                                    The profile must be preconfigured on the node to work.
+                                    Must be a descending path, relative to the kubelet's configured seccomp profile location.
+                                    Must be set if type is "Localhost". Must NOT be set for any other type.
+                                  type: string
+                                type:
+                                  description: |-
+                                    type indicates which kind of seccomp profile will be applied.
+                                    Valid options are:
 
-                        Deprecated: Please use ResolverRef with the bundles resolver instead.
-                        The field is staying there for go client backward compatibility, but is not used/allowed anymore.
+                                    Localhost - a profile defined in a file on the node should be used.
+                                    RuntimeDefault - the container runtime default profile should be used.
+                                    Unconfined - no profile should be applied.
+                                  type: string
+                            supplementalGroups:
+                              description: |-
+                                A list of groups applied to the first process run in each container, in
+                                addition to the container's primary GID and fsGroup (if specified).  If
+                                the SupplementalGroupsPolicy feature is enabled, the
+                                supplementalGroupsPolicy field determines whether these are in addition
+                                to or instead of any group memberships defined in the container image.
+                                If unspecified, no additional groups are added, though group memberships
+                                defined in the container image may still be used, depending on the
+                                supplementalGroupsPolicy field.
+                                Note that this field cannot be set when spec.os.name is windows.
+                              type: array
+                              items:
+                                type: integer
+                                format: int64
+                              x-kubernetes-list-type: atomic
+                            supplementalGroupsPolicy:
+                              description: |-
+                                Defines how supplemental groups of the first container processes are calculated.
+                                Valid values are "Merge" and "Strict". If not specified, "Merge" is used.
+                                (Alpha) Using the field requires the SupplementalGroupsPolicy feature gate to be enabled
+                                and the container runtime must implement support for this feature.
+                                Note that this field cannot be set when spec.os.name is windows.
+                              type: string
+                            sysctls:
+                              description: |-
+                                Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported
+                                sysctls (by the container runtime) might fail to launch.
+                                Note that this field cannot be set when spec.os.name is windows.
+                              type: array
+                              items:
+                                description: Sysctl defines a kernel parameter to be set
+                                type: object
+                                required:
+                                  - name
+                                  - value
+                                properties:
+                                  name:
+                                    description: Name of a property to set
+                                    type: string
+                                  value:
+                                    description: Value of a property to set
+                                    type: string
+                              x-kubernetes-list-type: atomic
+                            windowsOptions:
+                              description: |-
+                                The Windows specific settings applied to all containers.
+                                If unspecified, the options within a container's SecurityContext will be used.
+                                If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.
+                                Note that this field cannot be set when spec.os.name is linux.
+                              type: object
+                              properties:
+                                gmsaCredentialSpec:
+                                  description: |-
+                                    GMSACredentialSpec is where the GMSA admission webhook
+                                    (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the
+                                    GMSA credential spec named by the GMSACredentialSpecName field.
+                                  type: string
+                                gmsaCredentialSpecName:
+                                  description: GMSACredentialSpecName is the name of the GMSA credential spec to use.
+                                  type: string
+                                hostProcess:
+                                  description: |-
+                                    HostProcess determines if a container should be run as a 'Host Process' container.
+                                    All of a Pod's containers must have the same effective HostProcess value
+                                    (it is not allowed to have a mix of HostProcess containers and non-HostProcess containers).
+                                    In addition, if HostProcess is true then HostNetwork must also be set to true.
+                                  type: boolean
+                                runAsUserName:
+                                  description: |-
+                                    The UserName in Windows to run the entrypoint of the container process.
+                                    Defaults to the user specified in image metadata if unspecified.
+                                    May also be set in PodSecurityContext. If set in both SecurityContext and
+                                    PodSecurityContext, the value specified in SecurityContext takes precedence.
+                                  type: string
+                        tolerations:
+                          description: If specified, the pod's tolerations.
+                          type: array
+                          items:
+                            description: |-
+                              The pod this Toleration is attached to tolerates any taint that matches
+                              the triple <key,value,effect> using the matching operator <operator>.
+                            type: object
+                            properties:
+                              effect:
+                                description: |-
+                                  Effect indicates the taint effect to match. Empty means match all taint effects.
+                                  When specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute.
+                                type: string
+                              key:
+                                description: |-
+                                  Key is the taint key that the toleration applies to. Empty means match all taint keys.
+                                  If the key is empty, operator must be Exists; this combination means to match all values and all keys.
+                                type: string
+                              operator:
+                                description: |-
+                                  Operator represents a key's relationship to the value.
+                                  Valid operators are Exists and Equal. Defaults to Equal.
+                                  Exists is equivalent to wildcard for value, so that a pod can
+                                  tolerate all taints of a particular category.
+                                type: string
+                              tolerationSeconds:
+                                description: |-
+                                  TolerationSeconds represents the period of time the toleration (which must be
+                                  of effect NoExecute, otherwise this field is ignored) tolerates the taint. By default,
+                                  it is not set, which means tolerate the taint forever (do not evict). Zero and
+                                  negative values will be treated as 0 (evict immediately) by the system.
+                                type: integer
+                                format: int64
+                              value:
+                                description: |-
+                                  Value is the taint value the toleration matches to.
+                                  If the operator is Exists, the value should be empty, otherwise just a regular string.
+                                type: string
+                          x-kubernetes-list-type: atomic
+                        topologySpreadConstraints:
+                          description: |-
+                            TopologySpreadConstraints controls how Pods are spread across your cluster among
+                            failure-domains such as regions, zones, nodes, and other user-defined topology domains.
+                          type: array
+                          items:
+                            description: TopologySpreadConstraint specifies how to spread matching pods among the given topology.
+                            type: object
+                            required:
+                              - maxSkew
+                              - topologyKey
+                              - whenUnsatisfiable
+                            properties:
+                              labelSelector:
+                                description: |-
+                                  LabelSelector is used to find matching pods.
+                                  Pods that match this label selector are counted to determine the number of pods
+                                  in their corresponding topology domain.
+                                type: object
+                                properties:
+                                  matchExpressions:
+                                    description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
+                                    type: array
+                                    items:
+                                      description: |-
+                                        A label selector requirement is a selector that contains values, a key, and an operator that
+                                        relates the key and values.
+                                      type: object
+                                      required:
+                                        - key
+                                        - operator
+                                      properties:
+                                        key:
+                                          description: key is the label key that the selector applies to.
+                                          type: string
+                                        operator:
+                                          description: |-
+                                            operator represents a key's relationship to a set of values.
+                                            Valid operators are In, NotIn, Exists and DoesNotExist.
+                                          type: string
+                                        values:
+                                          description: |-
+                                            values is an array of string values. If the operator is In or NotIn,
+                                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                            the values array must be empty. This array is replaced during a strategic
+                                            merge patch.
+                                          type: array
+                                          items:
+                                            type: string
+                                          x-kubernetes-list-type: atomic
+                                    x-kubernetes-list-type: atomic
+                                  matchLabels:
+                                    description: |-
+                                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                      operator is "In", and the values array contains only "value". The requirements are ANDed.
+                                    type: object
+                                    additionalProperties:
+                                      type: string
+                                x-kubernetes-map-type: atomic
+                              matchLabelKeys:
+                                description: |-
+                                  MatchLabelKeys is a set of pod label keys to select the pods over which
+                                  spreading will be calculated. The keys are used to lookup values from the
+                                  incoming pod labels, those key-value labels are ANDed with labelSelector
+                                  to select the group of existing pods over which spreading will be calculated
+                                  for the incoming pod. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector.
+                                  MatchLabelKeys cannot be set when LabelSelector isn't set.
+                                  Keys that don't exist in the incoming pod labels will
+                                  be ignored. A null or empty list means only match against labelSelector.
+
+                                  This is a beta field and requires the MatchLabelKeysInPodTopologySpread feature gate to be enabled (enabled by default).
+                                type: array
+                                items:
+                                  type: string
+                                x-kubernetes-list-type: atomic
+                              maxSkew:
+                                description: |-
+                                  MaxSkew describes the degree to which pods may be unevenly distributed.
+                                  When `whenUnsatisfiable=DoNotSchedule`, it is the maximum permitted difference
+                                  between the number of matching pods in the target topology and the global minimum.
+                                  The global minimum is the minimum number of matching pods in an eligible domain
+                                  or zero if the number of eligible domains is less than MinDomains.
+                                  For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same
+                                  labelSelector spread as 2/2/1:
+                                  In this case, the global minimum is 1.
+                                  | zone1 | zone2 | zone3 |
+                                  |  P P  |  P P  |   P   |
+                                  - if MaxSkew is 1, incoming pod can only be scheduled to zone3 to become 2/2/2;
+                                  scheduling it onto zone1(zone2) would make the ActualSkew(3-1) on zone1(zone2)
+                                  violate MaxSkew(1).
+                                  - if MaxSkew is 2, incoming pod can be scheduled onto any zone.
+                                  When `whenUnsatisfiable=ScheduleAnyway`, it is used to give higher precedence
+                                  to topologies that satisfy it.
+                                  It's a required field. Default value is 1 and 0 is not allowed.
+                                type: integer
+                                format: int32
+                              minDomains:
+                                description: |-
+                                  MinDomains indicates a minimum number of eligible domains.
+                                  When the number of eligible domains with matching topology keys is less than minDomains,
+                                  Pod Topology Spread treats "global minimum" as 0, and then the calculation of Skew is performed.
+                                  And when the number of eligible domains with matching topology keys equals or greater than minDomains,
+                                  this value has no effect on scheduling.
+                                  As a result, when the number of eligible domains is less than minDomains,
+                                  scheduler won't schedule more than maxSkew Pods to those domains.
+                                  If value is nil, the constraint behaves as if MinDomains is equal to 1.
+                                  Valid values are integers greater than 0.
+                                  When value is not nil, WhenUnsatisfiable must be DoNotSchedule.
+
+                                  For example, in a 3-zone cluster, MaxSkew is set to 2, MinDomains is set to 5 and pods with the same
+                                  labelSelector spread as 2/2/2:
+                                  | zone1 | zone2 | zone3 |
+                                  |  P P  |  P P  |  P P  |
+                                  The number of domains is less than 5(MinDomains), so "global minimum" is treated as 0.
+                                  In this situation, new pod with the same labelSelector cannot be scheduled,
+                                  because computed skew will be 3(3 - 0) if new Pod is scheduled to any of the three zones,
+                                  it will violate MaxSkew.
+                                type: integer
+                                format: int32
+                              nodeAffinityPolicy:
+                                description: |-
+                                  NodeAffinityPolicy indicates how we will treat Pod's nodeAffinity/nodeSelector
+                                  when calculating pod topology spread skew. Options are:
+                                  - Honor: only nodes matching nodeAffinity/nodeSelector are included in the calculations.
+                                  - Ignore: nodeAffinity/nodeSelector are ignored. All nodes are included in the calculations.
+
+                                  If this value is nil, the behavior is equivalent to the Honor policy.
+                                  This is a beta-level feature default enabled by the NodeInclusionPolicyInPodTopologySpread feature flag.
+                                type: string
+                              nodeTaintsPolicy:
+                                description: |-
+                                  NodeTaintsPolicy indicates how we will treat node taints when calculating
+                                  pod topology spread skew. Options are:
+                                  - Honor: nodes without taints, along with tainted nodes for which the incoming pod
+                                  has a toleration, are included.
+                                  - Ignore: node taints are ignored. All nodes are included.
+
+                                  If this value is nil, the behavior is equivalent to the Ignore policy.
+                                  This is a beta-level feature default enabled by the NodeInclusionPolicyInPodTopologySpread feature flag.
+                                type: string
+                              topologyKey:
+                                description: |-
+                                  TopologyKey is the key of node labels. Nodes that have a label with this key
+                                  and identical values are considered to be in the same topology.
+                                  We consider each <key, value> as a "bucket", and try to put balanced number
+                                  of pods into each bucket.
+                                  We define a domain as a particular instance of a topology.
+                                  Also, we define an eligible domain as a domain whose nodes meet the requirements of
+                                  nodeAffinityPolicy and nodeTaintsPolicy.
+                                  e.g. If TopologyKey is "kubernetes.io/hostname", each Node is a domain of that topology.
+                                  And, if TopologyKey is "topology.kubernetes.io/zone", each zone is a domain of that topology.
+                                  It's a required field.
+                                type: string
+                              whenUnsatisfiable:
+                                description: |-
+                                  WhenUnsatisfiable indicates how to deal with a pod if it doesn't satisfy
+                                  the spread constraint.
+                                  - DoNotSchedule (default) tells the scheduler not to schedule it.
+                                  - ScheduleAnyway tells the scheduler to schedule the pod in any location,
+                                    but giving higher precedence to topologies that would help reduce the
+                                    skew.
+                                  A constraint is considered "Unsatisfiable" for an incoming pod
+                                  if and only if every possible node assignment for that pod would violate
+                                  "MaxSkew" on some topology.
+                                  For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same
+                                  labelSelector spread as 3/1/1:
+                                  | zone1 | zone2 | zone3 |
+                                  | P P P |   P   |   P   |
+                                  If WhenUnsatisfiable is set to DoNotSchedule, incoming pod can only be scheduled
+                                  to zone2(zone3) to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3) satisfies
+                                  MaxSkew(1). In other words, the cluster can still be imbalanced, but scheduler
+                                  won't make it *more* imbalanced.
+                                  It's a required field.
+                                type: string
+                          x-kubernetes-list-type: atomic
+                        volumes:
+                          description: |-
+                            List of volumes that can be mounted by containers belonging to the pod.
+                            More info: https://kubernetes.io/docs/concepts/storage/volumes
+                            See Pod.spec.volumes (API version: v1)
+                          x-kubernetes-preserve-unknown-fields: true
+                    serviceAccountName:
                       type: string
-                    kind:
-                      description: |-
-                        TaskKind indicates the Kind of the Task:
-                        1. Namespaced Task when Kind is set to "Task". If Kind is "", it defaults to "Task".
-                        2. Cluster-Scoped Task when Kind is set to "ClusterTask"
-                        3. Custom Task when Kind is non-empty and APIVersion is non-empty
-                      type: string
-                    name:
-                      description: 'Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names'
-                      type: string
-                    params:
-                      description: |-
-                        Params contains the parameters used to identify the
-                        referenced Tekton resource. Example entries might include
-                        "repo" or "path" but the set of params ultimately depends on
-                        the chosen resolver.
-                      type: array
-                      items:
-                        description: Param declares an ParamValues to use for the parameter called name.
-                        type: object
-                        required:
-                          - name
-                          - value
-                        properties:
-                          name:
-                            type: string
-                          value:
-                            x-kubernetes-preserve-unknown-fields: true
-                      x-kubernetes-list-type: atomic
-                    resolver:
-                      description: |-
-                        Resolver is the name of the resolver that should perform
-                        resolution of the referenced Tekton resource, such as "git".
-                      type: string
-                customSpec:
-                  description: Spec is a specification of a custom task
-                  type: object
-                  properties:
-                    apiVersion:
-                      type: string
-                    kind:
-                      type: string
-                    metadata:
-                      description: PipelineTaskMetadata contains the labels or annotations for an EmbeddedTask
-                      type: object
-                      properties:
-                        annotations:
-                          type: object
-                          additionalProperties:
-                            type: string
-                        labels:
-                          type: object
-                          additionalProperties:
-                            type: string
-                    spec:
-                      description: Spec is a specification of a custom task
-                      type: object
-                      x-kubernetes-preserve-unknown-fields: true
-                params:
-                  description: Params is a list of Param
-                  type: array
-                  items:
-                    description: Param declares an ParamValues to use for the parameter called name.
-                    type: object
-                    required:
-                      - name
-                      - value
-                    properties:
-                      name:
-                        type: string
-                      value:
-                        x-kubernetes-preserve-unknown-fields: true
-                  x-kubernetes-list-type: atomic
-                retries:
-                  description: Used for propagating retries count to custom tasks
-                  type: integer
-                serviceAccountName:
-                  type: string
-                status:
-                  description: Used for cancelling a customrun (and maybe more later on)
-                  type: string
-                statusMessage:
-                  description: Status message for cancellation.
-                  type: string
-                timeout:
+                timeouts:
                   description: |-
-                    Time after which the custom-task times out.
-                    Refer Go's ParseDuration documentation for expected format: https://golang.org/pkg/time/#ParseDuration
-                  type: string
+                    Time after which the Pipeline times out.
+                    Currently three keys are accepted in the map
+                    pipeline, tasks and finally
+                    with Timeouts.pipeline >= Timeouts.tasks + Timeouts.finally
+                  type: object
+                  properties:
+                    finally:
+                      description: Finally sets the maximum allowed duration of this pipeline's finally
+                      type: string
+                    pipeline:
+                      description: Pipeline sets the maximum allowed duration for execution of the entire pipeline. The sum of individual timeouts for tasks and finally must not exceed this value.
+                      type: string
+                    tasks:
+                      description: Tasks sets the maximum allowed duration of this pipeline's tasks
+                      type: string
                 workspaces:
-                  description: Workspaces is a list of WorkspaceBindings from volumes to workspaces.
+                  description: |-
+                    Workspaces holds a set of workspace bindings that must match names
+                    with those declared in the pipeline.
                   type: array
                   items:
                     description: WorkspaceBinding maps a Task's declared workspace to a Volume.
@@ -719,7 +966,7 @@ spec:
                         x-kubernetes-preserve-unknown-fields: true
                   x-kubernetes-list-type: atomic
             status:
-              description: CustomRunStatus defines the observed state of CustomRun
+              description: PipelineRunStatus defines the observed state of PipelineRun
               type: object
               properties:
                 annotations:
@@ -731,8 +978,61 @@ spec:
                   type: object
                   additionalProperties:
                     type: string
+                childReferences:
+                  description: list of TaskRun and Run names, PipelineTask names, and API versions/kinds for children of this PipelineRun.
+                  type: array
+                  items:
+                    description: ChildStatusReference is used to point to the statuses of individual TaskRuns and Runs within this PipelineRun.
+                    type: object
+                    properties:
+                      apiVersion:
+                        type: string
+                      displayName:
+                        description: |-
+                          DisplayName is a user-facing name of the pipelineTask that may be
+                          used to populate a UI.
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        description: Name is the name of the TaskRun or Run this is referencing.
+                        type: string
+                      pipelineTaskName:
+                        description: PipelineTaskName is the name of the PipelineTask this is referencing.
+                        type: string
+                      whenExpressions:
+                        description: WhenExpressions is the list of checks guarding the execution of the PipelineTask
+                        type: array
+                        items:
+                          description: |-
+                            WhenExpression allows a PipelineTask to declare expressions to be evaluated before the Task is run
+                            to determine whether the Task should be executed or skipped
+                          type: object
+                          properties:
+                            cel:
+                              description: |-
+                                CEL is a string of Common Language Expression, which can be used to conditionally execute
+                                the task based on the result of the expression evaluation
+                                More info about CEL syntax: https://github.com/google/cel-spec/blob/master/doc/langdef.md
+                              type: string
+                            input:
+                              description: Input is the string for guard checking which can be a static input or an output from a parent Task
+                              type: string
+                            operator:
+                              description: Operator that represents an Input's relationship to the values
+                              type: string
+                            values:
+                              description: |-
+                                Values is an array of strings, which is compared against the input, for guard checking
+                                It must be non-empty
+                              type: array
+                              items:
+                                type: string
+                              x-kubernetes-list-type: atomic
+                        x-kubernetes-list-type: atomic
+                  x-kubernetes-list-type: atomic
                 completionTime:
-                  description: CompletionTime is the time the build completed.
+                  description: CompletionTime is the time the PipelineRun completed.
                   type: string
                   format: date-time
                 conditions:
@@ -770,42 +1070,177 @@ spec:
                       type:
                         description: Type of condition.
                         type: string
-                extraFields:
-                  description: |-
-                    ExtraFields holds arbitrary fields provided by the custom task
-                    controller.
-                  x-kubernetes-preserve-unknown-fields: true
+                finallyStartTime:
+                  description: FinallyStartTime is when all non-finally tasks have been completed and only finally tasks are being executed.
+                  type: string
+                  format: date-time
                 observedGeneration:
                   description: |-
                     ObservedGeneration is the 'Generation' of the Service that
                     was last processed by the controller.
                   type: integer
                   format: int64
-                results:
+                pipelineSpec:
                   description: |-
-                    Results reports any output result values to be consumed by later
-                    tasks in a pipeline.
+                    PipelineSpec contains the exact spec used to instantiate the run.
+                    See Pipeline.spec (API version: tekton.dev/v1)
+                  x-kubernetes-preserve-unknown-fields: true
+                provenance:
+                  description: Provenance contains some key authenticated metadata about how a software artifact was built (what sources, what inputs/outputs, etc.).
+                  type: object
+                  properties:
+                    featureFlags:
+                      description: FeatureFlags identifies the feature flags that were used during the task/pipeline run
+                      type: object
+                      properties:
+                        awaitSidecarReadiness:
+                          type: boolean
+                        coschedule:
+                          type: string
+                        disableAffinityAssistant:
+                          type: boolean
+                        disableCredsInit:
+                          type: boolean
+                        disableInlineSpec:
+                          type: string
+                        enableAPIFields:
+                          type: string
+                        enableArtifacts:
+                          type: boolean
+                        enableCELInWhenExpression:
+                          type: boolean
+                        enableConciseResolverSyntax:
+                          type: boolean
+                        enableKeepPodOnCancel:
+                          type: boolean
+                        enableKubernetesSidecar:
+                          type: boolean
+                        enableParamEnum:
+                          type: boolean
+                        enableProvenanceInStatus:
+                          type: boolean
+                        enableStepActions:
+                          type: boolean
+                        enforceNonfalsifiability:
+                          type: string
+                        maxResultSize:
+                          type: integer
+                        requireGitSSHSecretKnownHosts:
+                          type: boolean
+                        resultExtractionMethod:
+                          type: string
+                        runningInEnvWithInjectedSidecars:
+                          type: boolean
+                        sendCloudEventsForRuns:
+                          type: boolean
+                        setSecurityContext:
+                          type: boolean
+                        setSecurityContextReadOnlyRootFilesystem:
+                          type: boolean
+                        verificationNoMatchPolicy:
+                          description: |-
+                            VerificationNoMatchPolicy is the feature flag for "trusted-resources-verification-no-match-policy"
+                            VerificationNoMatchPolicy can be set to "ignore", "warn" and "fail" values.
+                            ignore: skip trusted resources verification when no matching verification policies found
+                            warn: skip trusted resources verification when no matching verification policies found and log a warning
+                            fail: fail the taskrun or pipelines run if no matching verification policies found
+                          type: string
+                    refSource:
+                      description: RefSource identifies the source where a remote task/pipeline came from.
+                      type: object
+                      properties:
+                        digest:
+                          description: |-
+                            Digest is a collection of cryptographic digests for the contents of the artifact specified by URI.
+                            Example: {"sha1": "f99d13e554ffcb696dee719fa85b695cb5b0f428"}
+                          type: object
+                          additionalProperties:
+                            type: string
+                        entryPoint:
+                          description: |-
+                            EntryPoint identifies the entry point into the build. This is often a path to a
+                            build definition file and/or a target label within that file.
+                            Example: "task/git-clone/0.8/git-clone.yaml"
+                          type: string
+                        uri:
+                          description: |-
+                            URI indicates the identity of the source of the build definition.
+                            Example: "https://github.com/tektoncd/catalog"
+                          type: string
+                results:
+                  description: Results are the list of results written out by the pipeline task's containers
                   type: array
                   items:
-                    description: CustomRunResult used to describe the results of a task
+                    description: PipelineRunResult used to describe the results of a pipeline
                     type: object
                     required:
                       - name
                       - value
                     properties:
                       name:
-                        description: Name the given name
+                        description: Name is the result's name as declared by the Pipeline
                         type: string
                       value:
-                        description: Value the given value of the result
+                        description: Value is the result returned from the execution of this PipelineRun
+                        x-kubernetes-preserve-unknown-fields: true
+                  x-kubernetes-list-type: atomic
+                skippedTasks:
+                  description: list of tasks that were skipped due to when expressions evaluating to false
+                  type: array
+                  items:
+                    description: |-
+                      SkippedTask is used to describe the Tasks that were skipped due to their When Expressions
+                      evaluating to False. This is a struct because we are looking into including more details
+                      about the When Expressions that caused this Task to be skipped.
+                    type: object
+                    required:
+                      - name
+                      - reason
+                    properties:
+                      name:
+                        description: Name is the Pipeline Task name
                         type: string
-                retriesStatus:
-                  description: |-
-                    RetriesStatus contains the history of CustomRunStatus, in case of a retry.
-                    See CustomRun.status (API version: tekton.dev/v1beta1)
-                  x-kubernetes-preserve-unknown-fields: true
+                      reason:
+                        description: Reason is the cause of the PipelineTask being skipped.
+                        type: string
+                      whenExpressions:
+                        description: WhenExpressions is the list of checks guarding the execution of the PipelineTask
+                        type: array
+                        items:
+                          description: |-
+                            WhenExpression allows a PipelineTask to declare expressions to be evaluated before the Task is run
+                            to determine whether the Task should be executed or skipped
+                          type: object
+                          properties:
+                            cel:
+                              description: |-
+                                CEL is a string of Common Language Expression, which can be used to conditionally execute
+                                the task based on the result of the expression evaluation
+                                More info about CEL syntax: https://github.com/google/cel-spec/blob/master/doc/langdef.md
+                              type: string
+                            input:
+                              description: Input is the string for guard checking which can be a static input or an output from a parent Task
+                              type: string
+                            operator:
+                              description: Operator that represents an Input's relationship to the values
+                              type: string
+                            values:
+                              description: |-
+                                Values is an array of strings, which is compared against the input, for guard checking
+                                It must be non-empty
+                              type: array
+                              items:
+                                type: string
+                              x-kubernetes-list-type: atomic
+                        x-kubernetes-list-type: atomic
+                  x-kubernetes-list-type: atomic
+                spanContext:
+                  description: SpanContext contains tracing span context fields
+                  type: object
+                  additionalProperties:
+                    type: string
                 startTime:
-                  description: StartTime is the time the build is actually started.
+                  description: StartTime is the time the PipelineRun is actually started.
                   type: string
                   format: date-time
       additionalPrinterColumns:
@@ -826,12 +1261,23 @@ spec:
       subresources:
         status: {}
   names:
-    kind: CustomRun
-    plural: customruns
-    singular: customrun
+    kind: PipelineRun
+    plural: pipelineruns
+    singular: pipelinerun
     categories:
       - tekton
       - tekton-pipelines
+    shortNames:
+      - pr
+      - prs
   scope: Namespaced
+  conversion:
+    strategy: Webhook
+    webhook:
+      conversionReviewVersions: ["v1beta1", "v1"]
+      clientConfig:
+        service:
+          name: tekton-pipelines-webhook
+          namespace: tekton-pipelines
 
 ---

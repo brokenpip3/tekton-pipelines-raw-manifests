@@ -19,8 +19,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.69.1"
-    version: "v0.69.1"
+    pipeline.tekton.dev/release: "v0.70.0"
+    version: "v0.70.0"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
@@ -30,81 +30,388 @@ spec:
       storage: false
       schema:
         openAPIV3Schema:
-          type: object
-          # One can use x-kubernetes-preserve-unknown-fields: true
-          # at the root of the schema (and inside any properties, additionalProperties)
-          # to get the traditional CRD behaviour that nothing is pruned, despite
-          # setting spec.preserveUnknownProperties: false.
-          #
-          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
-          # See issue: https://github.com/knative/serving/issues/912
-          x-kubernetes-preserve-unknown-fields: true
-      additionalPrinterColumns:
-        - name: Succeeded
-          type: string
-          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].status"
-        - name: Reason
-          type: string
-          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].reason"
-        - name: StartTime
-          type: date
-          jsonPath: .status.startTime
-        - name: CompletionTime
-          type: date
-          jsonPath: .status.completionTime
-      # Opt into the status subresource so metadata.generation
-      # starts to increment
-      subresources:
-        status: {}
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
-          # One can use x-kubernetes-preserve-unknown-fields: true
-          # at the root of the schema (and inside any properties, additionalProperties)
-          # to get the traditional CRD behaviour that nothing is pruned, despite
-          # setting spec.preserveUnknownProperties: false.
-          #
-          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
-          # See issue: https://github.com/knative/serving/issues/912
-          x-kubernetes-preserve-unknown-fields: true
-      additionalPrinterColumns:
-        - name: Succeeded
-          type: string
-          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].status"
-        - name: Reason
-          type: string
-          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].reason"
-        - name: StartTime
-          type: date
-          jsonPath: .status.startTime
-        - name: CompletionTime
-          type: date
-          jsonPath: .status.completionTime
-      # Opt into the status subresource so metadata.generation
-      # starts to increment
-      subresources:
-        status: {}
-  names:
-    kind: PipelineRun
-    plural: pipelineruns
-    singular: pipelinerun
-    categories:
-      - tekton
-      - tekton-pipelines
-    shortNames:
-      - pr
-      - prs
-  scope: Namespaced
-  conversion:
-    strategy: Webhook
-    webhook:
-      conversionReviewVersions: ["v1beta1", "v1"]
-      clientConfig:
-        service:
-          name: tekton-pipelines-webhook
-          namespace: tekton-pipelines
+          description: |-
+            PipelineRun represents a single execution of a Pipeline. PipelineRuns are how
+            the graph of Tasks declared in a Pipeline are executed; they specify inputs
+            to Pipelines such as parameter values and capture operational aspects of the
+            Tasks execution such as service account and tolerations. Creating a
+            PipelineRun creates TaskRuns for Tasks in the referenced Pipeline.
 
----
+            Deprecated: Please use v1.PipelineRun instead.
+          type: object
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: PipelineRunSpec defines the desired state of PipelineRun
+              type: object
+              properties:
+                params:
+                  description: Params is a list of parameter names and values.
+                  type: array
+                  items:
+                    description: Param declares an ParamValues to use for the parameter called name.
+                    type: object
+                    required:
+                      - name
+                      - value
+                    properties:
+                      name:
+                        type: string
+                      value:
+                        x-kubernetes-preserve-unknown-fields: true
+                  x-kubernetes-list-type: atomic
+                pipelineRef:
+                  description: PipelineRef can be used to refer to a specific instance of a Pipeline.
+                  type: object
+                  properties:
+                    apiVersion:
+                      description: API version of the referent
+                      type: string
+                    bundle:
+                      description: |-
+                        Bundle url reference to a Tekton Bundle.
+
+                        Deprecated: Please use ResolverRef with the bundles resolver instead.
+                        The field is staying there for go client backward compatibility, but is not used/allowed anymore.
+                      type: string
+                    name:
+                      description: 'Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names'
+                      type: string
+                    params:
+                      description: |-
+                        Params contains the parameters used to identify the
+                        referenced Tekton resource. Example entries might include
+                        "repo" or "path" but the set of params ultimately depends on
+                        the chosen resolver.
+                      type: array
+                      items:
+                        description: Param declares an ParamValues to use for the parameter called name.
+                        type: object
+                        required:
+                          - name
+                          - value
+                        properties:
+                          name:
+                            type: string
+                          value:
+                            x-kubernetes-preserve-unknown-fields: true
+                      x-kubernetes-list-type: atomic
+                    resolver:
+                      description: |-
+                        Resolver is the name of the resolver that should perform
+                        resolution of the referenced Tekton resource, such as "git".
+                      type: string
+                pipelineSpec:
+                  description: |-
+                    Specifying PipelineSpec can be disabled by setting
+                    `disable-inline-spec` feature flag.
+                    See Pipeline.spec (API version: tekton.dev/v1beta1)
+                  x-kubernetes-preserve-unknown-fields: true
+                podTemplate:
+                  description: PodTemplate holds pod specific configuration
+                  type: object
+                  properties:
+                    affinity:
+                      description: |-
+                        If specified, the pod's scheduling constraints.
+                        See Pod.spec.affinity (API version: v1)
+                      x-kubernetes-preserve-unknown-fields: true
+                    automountServiceAccountToken:
+                      description: |-
+                        AutomountServiceAccountToken indicates whether pods running as this
+                        service account should have an API token automatically mounted.
+                      type: boolean
+                    dnsConfig:
+                      description: |-
+                        Specifies the DNS parameters of a pod.
+                        Parameters specified here will be merged to the generated DNS
+                        configuration based on DNSPolicy.
+                      type: object
+                      properties:
+                        nameservers:
+                          description: |-
+                            A list of DNS name server IP addresses.
+                            This will be appended to the base nameservers generated from DNSPolicy.
+                            Duplicated nameservers will be removed.
+                          type: array
+                          items:
+                            type: string
+                          x-kubernetes-list-type: atomic
+                        options:
+                          description: |-
+                            A list of DNS resolver options.
+                            This will be merged with the base options generated from DNSPolicy.
+                            Duplicated entries will be removed. Resolution options given in Options
+                            will override those that appear in the base DNSPolicy.
+                          type: array
+                          items:
+                            description: PodDNSConfigOption defines DNS resolver options of a pod.
+                            type: object
+                            properties:
+                              name:
+                                description: Required.
+                                type: string
+                              value:
+                                type: string
+                          x-kubernetes-list-type: atomic
+                        searches:
+                          description: |-
+                            A list of DNS search domains for host-name lookup.
+                            This will be appended to the base search paths generated from DNSPolicy.
+                            Duplicated search paths will be removed.
+                          type: array
+                          items:
+                            type: string
+                          x-kubernetes-list-type: atomic
+                    dnsPolicy:
+                      description: |-
+                        Set DNS policy for the pod. Defaults to "ClusterFirst". Valid values are
+                        'ClusterFirst', 'Default' or 'None'. DNS parameters given in DNSConfig
+                        will be merged with the policy selected with DNSPolicy.
+                      type: string
+                    enableServiceLinks:
+                      description: |-
+                        EnableServiceLinks indicates whether information about services should be injected into pod's
+                        environment variables, matching the syntax of Docker links.
+                        Optional: Defaults to true.
+                      type: boolean
+                    env:
+                      description: List of environment variables that can be provided to the containers belonging to the pod.
+                      type: array
+                      items:
+                        description: EnvVar represents an environment variable present in a Container.
+                        type: object
+                        required:
+                          - name
+                        properties:
+                          name:
+                            description: Name of the environment variable. Must be a C_IDENTIFIER.
+                            type: string
+                          value:
+                            description: |-
+                              Variable references $(VAR_NAME) are expanded
+                              using the previously defined environment variables in the container and
+                              any service environment variables. If a variable cannot be resolved,
+                              the reference in the input string will be unchanged. Double $$ are reduced
+                              to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e.
+                              "$$(VAR_NAME)" will produce the string literal "$(VAR_NAME)".
+                              Escaped references will never be expanded, regardless of whether the variable
+                              exists or not.
+                              Defaults to "".
+                            type: string
+                          valueFrom:
+                            description: Source for the environment variable's value. Cannot be used if value is not empty.
+                            type: object
+                            properties:
+                              configMapKeyRef:
+                                description: Selects a key of a ConfigMap.
+                                type: object
+                                required:
+                                  - key
+                                properties:
+                                  key:
+                                    description: The key to select.
+                                    type: string
+                                  name:
+                                    description: |-
+                                      Name of the referent.
+                                      This field is effectively required, but due to backwards compatibility is
+                                      allowed to be empty. Instances of this type with an empty value here are
+                                      almost certainly wrong.
+                                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    type: string
+                                    default: ""
+                                  optional:
+                                    description: Specify whether the ConfigMap or its key must be defined
+                                    type: boolean
+                                x-kubernetes-map-type: atomic
+                              fieldRef:
+                                description: |-
+                                  Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['<KEY>']`, `metadata.annotations['<KEY>']`,
+                                  spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
+                                type: object
+                                required:
+                                  - fieldPath
+                                properties:
+                                  apiVersion:
+                                    description: Version of the schema the FieldPath is written in terms of, defaults to "v1".
+                                    type: string
+                                  fieldPath:
+                                    description: Path of the field to select in the specified API version.
+                                    type: string
+                                x-kubernetes-map-type: atomic
+                              resourceFieldRef:
+                                description: |-
+                                  Selects a resource of the container: only resources limits and requests
+                                  (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.
+                                type: object
+                                required:
+                                  - resource
+                                properties:
+                                  containerName:
+                                    description: 'Container name: required for volumes, optional for env vars'
+                                    type: string
+                                  divisor:
+                                    description: Specifies the output format of the exposed resources, defaults to "1"
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    anyOf:
+                                      - type: integer
+                                      - type: string
+                                    x-kubernetes-int-or-string: true
+                                  resource:
+                                    description: 'Required: resource to select'
+                                    type: string
+                                x-kubernetes-map-type: atomic
+                              secretKeyRef:
+                                description: Selects a key of a secret in the pod's namespace
+                                type: object
+                                required:
+                                  - key
+                                properties:
+                                  key:
+                                    description: The key of the secret to select from.  Must be a valid secret key.
+                                    type: string
+                                  name:
+                                    description: |-
+                                      Name of the referent.
+                                      This field is effectively required, but due to backwards compatibility is
+                                      allowed to be empty. Instances of this type with an empty value here are
+                                      almost certainly wrong.
+                                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    type: string
+                                    default: ""
+                                  optional:
+                                    description: Specify whether the Secret or its key must be defined
+                                    type: boolean
+                                x-kubernetes-map-type: atomic
+                      x-kubernetes-list-type: atomic
+                    hostAliases:
+                      description: |-
+                        HostAliases is an optional list of hosts and IPs that will be injected into the pod's hosts
+                        file if specified. This is only valid for non-hostNetwork pods.
+                      type: array
+                      items:
+                        description: |-
+                          HostAlias holds the mapping between IP and hostnames that will be injected as an entry in the
+                          pod's hosts file.
+                        type: object
+                        required:
+                          - ip
+                        properties:
+                          hostnames:
+                            description: Hostnames for the above IP address.
+                            type: array
+                            items:
+                              type: string
+                            x-kubernetes-list-type: atomic
+                          ip:
+                            description: IP address of the host file entry.
+                            type: string
+                      x-kubernetes-list-type: atomic
+                    hostNetwork:
+                      description: HostNetwork specifies whether the pod may use the node network namespace
+                      type: boolean
+                    imagePullSecrets:
+                      description: ImagePullSecrets gives the name of the secret used by the pod to pull the image if specified
+                      type: array
+                      items:
+                        description: |-
+                          LocalObjectReference contains enough information to let you locate the
+                          referenced object inside the same namespace.
+                        type: object
+                        properties:
+                          name:
+                            description: |-
+                              Name of the referent.
+                              This field is effectively required, but due to backwards compatibility is
+                              allowed to be empty. Instances of this type with an empty value here are
+                              almost certainly wrong.
+                              More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            type: string
+                            default: ""
+                        x-kubernetes-map-type: atomic
+                      x-kubernetes-list-type: atomic
+                    nodeSelector:
+                      description: |-
+                        NodeSelector is a selector which must be true for the pod to fit on a node.
+                        Selector which must match a node's labels for the pod to be scheduled on that node.
+                        More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+                      type: object
+                      additionalProperties:
+                        type: string
+                    priorityClassName:
+                      description: |-
+                        If specified, indicates the pod's priority. "system-node-critical" and
+                        "system-cluster-critical" are two special keywords which indicate the
+                        highest priorities with the former being the highest priority. Any other
+                        name must be defined by creating a PriorityClass object with that name.
+                        If not specified, the pod priority will be default or zero if there is no
+                        default.
+                      type: string
+                    runtimeClassName:
+                      description: |-
+                        RuntimeClassName refers to a RuntimeClass object in the node.k8s.io
+                        group, which should be used to run this pod. If no RuntimeClass resource
+                        matches the named class, the pod will not be run. If unset or empty, the
+                        "legacy" RuntimeClass will be used, which is an implicit class with an
+                        empty definition that uses the default runtime handler.
+                        More info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md
+                        This is a beta feature as of Kubernetes v1.14.
+                      type: string
+                    schedulerName:
+                      description: SchedulerName specifies the scheduler to be used to dispatch the Pod
+                      type: string
+                    securityContext:
+                      description: |-
+                        SecurityContext holds pod-level security attributes and common container settings.
+                        Optional: Defaults to empty.  See type description for default values of each field.
+                      type: object
+                      properties:
+                        appArmorProfile:
+                          description: |-
+                            appArmorProfile is the AppArmor options to use by the containers in this pod.
+                            Note that this field cannot be set when spec.os.name is windows.
+                          type: object
+                          required:
+                            - type
+                          properties:
+                            localhostProfile:
+                              description: |-
+                                localhostProfile indicates a profile loaded on the node that should be used.
+                                The profile must be preconfigured on the node to work.
+                                Must match the loaded name of the profile.
+                                Must be set if and only if type is "Localhost".
+                              type: string
+                            type:
+                              description: |-
+                                type indicates which kind of AppArmor profile will be applied.
+                                Valid options are:
+                                  Localhost - a profile pre-loaded on the node.
+                                  RuntimeDefault - the container runtime's default profile.
+                                  Unconfined - no AppArmor enforcement.
+                              type: string
+                        fsGroup:
+                          description: |-
+                            A special supplemental group that applies to all containers in a pod.
+                            Some volume types allow the Kubelet to change the ownership of that volume
+                            to be owned by the pod:
+
+                            1. The owning GID will be the FSGroup
+                            2. The setgid bit is set (new files created in the volume will be owned by FSGroup)
+                            3. The permission bits are OR'd with rw-rw----
