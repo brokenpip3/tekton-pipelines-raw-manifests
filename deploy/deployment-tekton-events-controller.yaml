@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: events
     app.kubernetes.io/component: events
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.70.0"
+    app.kubernetes.io/version: "v0.59.6"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.70.0"
+    pipeline.tekton.dev/release: "v0.59.6"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.70.0"
+    version: "v0.59.6"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: events
         app.kubernetes.io/component: events
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.70.0"
+        app.kubernetes.io/version: "v0.59.6"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.70.0"
+        pipeline.tekton.dev/release: "v0.59.6"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-events-controller
-        version: "v0.70.0"
+        version: "v0.59.6"
     spec:
       affinity:
         nodeAffinity:
@@ -61,7 +61,7 @@ spec:
       serviceAccountName: tekton-events-controller
       containers:
         - name: tekton-events-controller
-          image: ghcr.io/tektoncd/pipeline/events-a9042f7efb0cbade2a868a1ee5ddd52c:v0.70.0@sha256:4766db5f4d0cb923a0ef440c3f0fb309477162935d121289d85965d6adda8448
+          image: ghcr.io/tektoncd/pipeline/events-a9042f7efb0cbade2a868a1ee5ddd52c:v0.59.6@sha256:facbc56a51993cd9dbd1be1ba14dcd73052809007e518d589d499e24206adcda
           args: []
           volumeMounts:
             - name: config-logging
@@ -73,8 +73,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: KUBERNETES_MIN_VERSION
-              value: "v1.28.0"
             # If you are changing these names, you will also need to update
             # the controller's Role in 200-role.yaml to include the new
             # values in the "configmaps" "get" rule.
@@ -92,7 +90,6 @@ spec:
               value: /etc/ssl/certs
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - "ALL"

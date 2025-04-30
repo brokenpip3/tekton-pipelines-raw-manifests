@@ -24,12 +24,12 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.70.0"
+    app.kubernetes.io/version: "v0.59.6"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.70.0"
+    pipeline.tekton.dev/release: "v0.59.6"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.70.0"
+    version: "v0.59.6"
 spec:
   selector:
     matchLabels:
@@ -43,13 +43,13 @@ spec:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/component: webhook
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.70.0"
+        app.kubernetes.io/version: "v0.59.6"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.70.0"
+        pipeline.tekton.dev/release: "v0.59.6"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-webhook
-        version: "v0.70.0"
+        version: "v0.59.6"
     spec:
       affinity:
         nodeAffinity:
@@ -76,7 +76,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: ghcr.io/tektoncd/pipeline/webhook-d4749e605405422fd87700164e31b2d1:v0.70.0@sha256:454b6ccc39ff1f13226ad5610bf91d7c3a7de2fe6e253a9aff972fa3f5511bd1
+          image: ghcr.io/tektoncd/pipeline/webhook-d4749e605405422fd87700164e31b2d1:v0.59.6@sha256:bd6fd10b0e881cf63e52ae83ba1ed4b9b7f191819848e43448503d7ffb712af3
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
@@ -90,8 +90,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: KUBERNETES_MIN_VERSION
-              value: "v1.28.0"
             # If you are changing these names, you will also need to update
             # the webhook's Role in 200-role.yaml to include the new
             # values in the "configmaps" "get" rule.
@@ -128,7 +126,6 @@ spec:
               value: tekton.dev/pipeline
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - "ALL"
