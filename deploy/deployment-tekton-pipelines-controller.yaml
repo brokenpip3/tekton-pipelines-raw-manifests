@@ -21,12 +21,12 @@ metadata:
     app.kubernetes.io/name: controller
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.59.6"
+    app.kubernetes.io/version: "v1.0.0"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.59.6"
+    pipeline.tekton.dev/release: "v1.0.0"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.59.6"
+    version: "v1.0.0"
 spec:
   replicas: 1
   selector:
@@ -41,13 +41,13 @@ spec:
         app.kubernetes.io/name: controller
         app.kubernetes.io/component: controller
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.59.6"
+        app.kubernetes.io/version: "v1.0.0"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.59.6"
+        pipeline.tekton.dev/release: "v1.0.0"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-controller
-        version: "v0.59.6"
+        version: "v1.0.0"
     spec:
       affinity:
         nodeAffinity:
@@ -61,11 +61,11 @@ spec:
       serviceAccountName: tekton-pipelines-controller
       containers:
         - name: tekton-pipelines-controller
-          image: ghcr.io/tektoncd/pipeline/controller-10a3e32792f33651396d02b6855a6e36:v0.59.6@sha256:efca49eb6d14ce1c15800304e3b1c09e833df1ad5758c452af4458f841d91838
+          image: ghcr.io/tektoncd/pipeline/controller-10a3e32792f33651396d02b6855a6e36:v1.0.0@sha256:3ea85d91808ffa72cf56958c219ab515ef6bd319f6b8501b288a3a54b69806d7
           args: [
             # These images are built on-demand by `ko resolve` and are replaced
             # by image references by digest.
-            "-entrypoint-image", "ghcr.io/tektoncd/pipeline/entrypoint-bff0a22da108bc2f16c818c97641a296:v0.59.6@sha256:c2b26251a93846d886c4962024aaff1215c128636d25324851351071d1681987", "-nop-image", "ghcr.io/tektoncd/pipeline/nop-8eac7c133edad5df719dc37b36b62482:v0.59.6@sha256:5dcb0aca2474cfddbd64d33aa8c19a081ab3b041c01d27b3ea157e8e8202e70d", "-sidecarlogresults-image", "ghcr.io/tektoncd/pipeline/sidecarlogresults-7501c6a20d741631510a448b48ab098f:v0.59.6@sha256:368a56c88dc894a4523d74f218eaca3fe652be1060bb23a3850061b4f43d4c3d", "-workingdirinit-image", "ghcr.io/tektoncd/pipeline/workingdirinit-0c558922ec6a1b739e550e349f2d5fc1:v0.59.6@sha256:a1fa546ce825ce7268792f51fd2ec33ade369c3e6606cc5a6ccb6dc052b293dd",
+            "-entrypoint-image", "ghcr.io/tektoncd/pipeline/entrypoint-bff0a22da108bc2f16c818c97641a296:v1.0.0@sha256:06eadb09e7648748eb1ae65dfbb9b82b40d6c2e14ec5a5cb7e920576e676180d", "-nop-image", "ghcr.io/tektoncd/pipeline/nop-8eac7c133edad5df719dc37b36b62482:v1.0.0@sha256:036f50b3ae9bdf9ef63525ebd7cad5cd22477f97e0215b9de4a70859f4912fe1", "-sidecarlogresults-image", "ghcr.io/tektoncd/pipeline/sidecarlogresults-7501c6a20d741631510a448b48ab098f:v1.0.0@sha256:b1b2d63988cdc05598450605da3317d3229f3c005c6b788327ad42c292d34d28", "-workingdirinit-image", "ghcr.io/tektoncd/pipeline/workingdirinit-0c558922ec6a1b739e550e349f2d5fc1:v1.0.0@sha256:f15e51dce7f373c1814dbbb97fc35b478ae570853ad1c4f6fe27385cb8e792a4",
             # The shell image must allow root in order to create directories and copy files to PVCs.
             # cgr.dev/chainguard/busybox as of April 14 2022
             # image shall not contains tag, so it will be supported on a runtime like cri-o
@@ -83,6 +83,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: KUBERNETES_MIN_VERSION
+              value: "v1.28.0"
             # If you are changing these names, you will also need to update
             # the controller's Role in 200-role.yaml to include the new
             # values in the "configmaps" "get" rule.
@@ -106,6 +108,7 @@ spec:
               value: tekton.dev/pipeline
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - "ALL"
