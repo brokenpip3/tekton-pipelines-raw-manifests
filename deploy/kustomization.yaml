@@ -26,6 +26,7 @@ resources:
 - configmap-config-registry-cert.yaml
 - configmap-config-spire.yaml
 - configmap-config-tracing.yaml
+- configmap-config-wait-exponential-backoff.yaml
 - configmap-feature-flags.yaml
 - configmap-git-resolver-config.yaml
 - configmap-http-resolver-config.yaml
