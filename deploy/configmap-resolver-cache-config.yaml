@@ -1,4 +1,4 @@
-# Copyright 2021 The Tekton Authors
+# Copyright 2025 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,17 +15,16 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pipelines-info
-  namespace: tekton-pipelines
+  name: resolver-cache-config
+  namespace: tekton-pipelines-resolvers
   labels:
+    app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
 data:
-  # Contains pipelines version which can be queried by external
-  # tools such as CLI. Elevated permissions are already given to
-  # this ConfigMap such that even if we don't have access to
-  # other resources in the namespace we still can have access to
-  # this ConfigMap.
-  version: "v1.6.0"
+  # Maximum number of entries in the resolver cache
+  max-size: "1000"
+  # Time-to-live for cache entries (examples: 5m, 10m, 1h)
+  ttl: "5m"
 
 ---

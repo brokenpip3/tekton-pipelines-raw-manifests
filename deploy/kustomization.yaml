@@ -32,6 +32,7 @@ resources:
 - configmap-http-resolver-config.yaml
 - configmap-hubresolver-config.yaml
 - configmap-pipelines-info.yaml
+- configmap-resolver-cache-config.yaml
 - configmap-resolvers-feature-flags.yaml
 - customresourcedefinition-customruns.tekton.dev.yaml
 - customresourcedefinition-pipelineruns.tekton.dev.yaml
